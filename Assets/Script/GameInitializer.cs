@@ -39,4 +39,8 @@ public class GameInitializer : MonoBehaviour
                 throw new ArgumentException($"does not support at platform {Application.platform}");
         }
     }
+    void Update()
+    {
+        print("hello");
+    }
 }
