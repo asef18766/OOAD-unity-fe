@@ -12,7 +12,7 @@ namespace InputControllers.Android
         [SerializeField] private Sprite jump=null;
 
         private PlayerState _state;
-        private void Swap(string e)
+        private void Swap(string e , JSONObject obj)
         {
             switch (_state)
             {

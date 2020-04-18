@@ -16,6 +16,7 @@ public class Player : UuidObject
     private string _click = "";
     [SerializeField] private IPlayerController controller;
     [SerializeField] private float moveScale = 0.3f;
+    [SerializeField] private float jumpScale = 3.0f;
     private IEnumerator _attack()
     {
         yield break;
@@ -24,11 +25,12 @@ public class Player : UuidObject
     private bool _triggered;
     private IEnumerator _jump()
     {
-        print("jump!");
-        _rb.AddForce(Vector2.up);
+        if(!_touchedGround)
+            yield break;
+        _touchedGround = false;
+        _rb.AddForce(Vector2.up * jumpScale);
         while (!_touchedGround)
         {
-            print("Waiting 2 touch ground");
             yield return new WaitForEndOfFrame();
         }
         _triggered = false;

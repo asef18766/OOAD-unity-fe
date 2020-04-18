@@ -1,4 +1,4 @@
-﻿namespace Map
+﻿namespace Map.Platforms
 {
     public interface IPlatform
     {
