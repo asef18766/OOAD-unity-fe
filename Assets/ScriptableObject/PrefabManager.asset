@@ -17,3 +17,4 @@ MonoBehaviour:
     - Player
     m_values:
     - {fileID: 1553343598733561548, guid: 51d92c62307b03e4a8e5b631023229fe, type: 3}
+  selfInstance: {fileID: 11400000}
