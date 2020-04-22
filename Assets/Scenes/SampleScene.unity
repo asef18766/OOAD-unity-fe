@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveStick: {fileID: 314631901}
-  attackStick: {fileID: 0}
+  attackStick: {fileID: 1691749020}
 --- !u!4 &547359887
 Transform:
   m_ObjectHideFlags: 0
@@ -699,7 +699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1691749020
 MonoBehaviour:
   m_ObjectHideFlags: 0
