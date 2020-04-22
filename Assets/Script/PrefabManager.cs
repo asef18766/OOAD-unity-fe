@@ -5,11 +5,12 @@ using UnityEngine;
 public class PrefabManager : ScriptableObject
 { 
     [SerializeField] private StringPrefabDictionary prefabs=null;
+    [SerializeField] private PrefabManager selfInstance = null;
     private static PrefabManager _instance=null;
 
     private void OnEnable()
     {
-        _instance = this;
+        _instance = selfInstance;
     }
 
     public static PrefabManager GetInstance()
