@@ -15,7 +15,7 @@ namespace Init
                     break;
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
-                    PCInit.BuildPc();
+                    PcInit.BuildPc();
                     break;
                 case RuntimePlatform.OSXPlayer:
                     break;

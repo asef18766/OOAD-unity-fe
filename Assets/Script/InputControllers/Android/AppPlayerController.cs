@@ -4,7 +4,8 @@ namespace InputControllers.Android
 {
     public class AppPlayerController : MonoBehaviour, IPlayerController
     {
-        [SerializeField]private AppPadModel moveStick=null;
+        [SerializeField]private AppPadModel moveLStick=null;
+        [SerializeField] private AppPadModel moveRStick = null;
         [SerializeField]private AppPadModel attackStick=null;
         private void Start()
         {
@@ -13,7 +14,10 @@ namespace InputControllers.Android
 
         public Vector2 OnMove()
         {
+            /*
             return  moveStick.GetMove();
+            */
+            return Vector2.zero;
         }
     
         public bool OnClicked()
