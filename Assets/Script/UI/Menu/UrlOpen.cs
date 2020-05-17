@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Menu
 {
@@ -7,6 +8,11 @@ namespace UI.Menu
         public void OpenUrl(string url)
         {
             Application.OpenURL(url);
+        }
+
+        public void LoadScence(string name)
+        {
+            SceneManager.LoadScene(name);
         }
     }
 }

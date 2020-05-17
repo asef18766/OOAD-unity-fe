@@ -93,10 +93,11 @@ namespace UI.Menu
                 {
                     _serverNameDictionary.Add(text , NetworkManager.GetInstance().GetComponent().url);
                 }
-        
-                _dropdown.options[_choice].text = text;
+                if(_choice == -1) return;
+                    _dropdown.options[_choice].text = text;
                 _dropdown.RefreshShownValue();
             });
+            GameChoice.ServerName = text;
         }
         private void TestOpen(SocketIOEvent e)
         {
