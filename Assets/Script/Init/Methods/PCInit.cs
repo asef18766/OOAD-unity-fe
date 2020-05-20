@@ -1,9 +1,11 @@
 using UnityEngine;
 using InputControllers.Pc;
 using System;
+using Object = UnityEngine.Object;
+
 namespace Init.Methods
 {
-    class PCInit
+    internal static class PcInit
     {
         public static void BuildPc()
         {
@@ -17,7 +19,7 @@ namespace Init.Methods
             
             if (Camera.main != null)
             {
-                var playerObject = MonoBehaviour.Instantiate(playerPrefab);
+                var playerObject = Object.Instantiate(playerPrefab);
                 playerObject.transform.position = Vector3.zero;
                 var controller = playerObject.AddComponent<PcPlayerController>();
                 var player = playerObject.GetComponent<Player>();
