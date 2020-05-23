@@ -43,6 +43,7 @@ public class Player : UuidObject
         {
             case PlayerState.Attack:
                 _click = nameof(_attack);
+                _rb.gravityScale = -1;
                 break;
             case PlayerState.Jump:
                 _click = nameof(_jump);
@@ -68,7 +69,7 @@ public class Player : UuidObject
         }
         var move = controller.OnMove();
         if(move != Vector2.zero)
-            _rb.AddForce(move * moveScale);
+            transform.Translate(move * moveScale);
     }
 
     private bool _touchedGround = false;

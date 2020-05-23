@@ -16,7 +16,9 @@ MonoBehaviour:
     m_keys:
     - Network
     - Player
+    - NormalPlatform
     m_values:
     - {fileID: 100000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
     - {fileID: 1553343598733561548, guid: 51d92c62307b03e4a8e5b631023229fe, type: 3}
+    - {fileID: 5482619564264053497, guid: b6da761887ac1f4439d3fa995b668508, type: 3}
   selfInstance: {fileID: 11400000}
