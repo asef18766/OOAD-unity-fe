@@ -2,6 +2,7 @@ using UnityEngine;
 using InputControllers.Pc;
 using System;
 using Map.Platforms;
+using UnityEditor;
 using Object = UnityEngine.Object;
 
 namespace Init.Methods
@@ -54,7 +55,7 @@ namespace Init.Methods
                     throw new NotImplementedException();
                     break;
                 case PlatformTypes.Normal:
-                    6
+                    gameObject = _prefabManager.GetGameObject("NormalPlatform");
                     break;
                 case PlatformTypes.Spike:
                     throw new NotImplementedException();
