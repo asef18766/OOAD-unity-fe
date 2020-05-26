@@ -1,12 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace InputControllers.Android
 {
     public class AppPlayerController : MonoBehaviour, IPlayerController
     {
-        [SerializeField]private AppPadModel moveLStick=null;
-        [SerializeField] private AppPadModel moveRStick = null;
-        [SerializeField]private AppPadModel attackStick=null;
+        [SerializeField]private AppPadModel leftMoveButton;
+        [SerializeField]private AppPadModel rightMoveButton;
+        [SerializeField]private AppPadModel functionButton;
         private void Start()
         {
             Input.simulateMouseWithTouches = true;
@@ -14,15 +15,19 @@ namespace InputControllers.Android
 
         public Vector2 OnMove()
         {
-            /*
-            return  moveStick.GetMove();
-            */
-            return Vector2.zero;
+            bool leftPressed = leftMoveButton.GetPressed();
+            bool rightPressed = rightMoveButton.GetPressed();
+            // if both left and right buttons are pressed or unpressed
+            if (leftPressed ^ rightPressed)
+                return Vector2.zero;
+            Debug.Log("move");
+            return leftPressed ? Vector2.left : Vector2.right;
         }
     
         public bool OnClicked()
         {
-            return attackStick.GetPressed();
+            Debug.Log("click");
+            return functionButton.GetPressed();
         }
     }
 }
