@@ -46,22 +46,22 @@ namespace Init.Methods
             switch (type)
             {
                 case PlatformTypes.Direction:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("DirectionPlatform");
                     break;
                 case PlatformTypes.Fragile:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("FragilePlatform");
                     break;
                 case PlatformTypes.Freeze:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("FreezePlatform");
                     break;
                 case PlatformTypes.Normal:
                     gameObject = _prefabManager.GetGameObject("NormalPlatform");
                     break;
                 case PlatformTypes.Spike:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("SpikePlatform");
                     break;
                 case PlatformTypes.Time:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("TimePlatform");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
