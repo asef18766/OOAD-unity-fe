@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveScale: 0.1
-  jumpScale: 2
+  jumpScale: 4
 --- !u!50 &-6897382389972126659
 Rigidbody2D:
   serializedVersion: 4

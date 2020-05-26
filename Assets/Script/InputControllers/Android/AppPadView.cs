@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using Event;
 using UnityEngine;
 using UUID;
@@ -8,8 +7,8 @@ namespace InputControllers.Android
 {
     public class AppPadView : UuidObject
     {
-        [SerializeField] private Sprite attack=null;
-        [SerializeField] private Sprite jump=null;
+        [SerializeField] private Sprite attack;
+        [SerializeField] private Sprite jump;
 
         private PlayerState _state;
         private void Swap(string e , JSONObject obj)

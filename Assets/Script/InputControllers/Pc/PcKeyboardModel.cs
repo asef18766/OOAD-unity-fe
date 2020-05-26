@@ -11,7 +11,7 @@ namespace InputControllers.Pc
          * 2 for left
          * 3 for right
          */
-        [SerializeField] private KeyCode[] walk = new KeyCode[]
+        [SerializeField] public KeyCode[] walk = new KeyCode[]
         {
             KeyCode.W,
             KeyCode.S,
