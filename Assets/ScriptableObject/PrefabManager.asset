@@ -16,9 +16,19 @@ MonoBehaviour:
     m_keys:
     - Network
     - Player
+    - TimePlatform
+    - SpikePlatform
+    - DirectionPlatform
+    - FreezePlatform
+    - FragilePlatform
     - NormalPlatform
     m_values:
     - {fileID: 100000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
     - {fileID: 1553343598733561548, guid: 51d92c62307b03e4a8e5b631023229fe, type: 3}
+    - {fileID: 271308169189619412, guid: 93ee37498a0a12d4b97db01b998f6530, type: 3}
+    - {fileID: 2462029476106286429, guid: 9d75e856d8a05f140819cc3a55e4f415, type: 3}
+    - {fileID: 1314723901072168265, guid: 48b15435251a97b4aa418d0ebce41a55, type: 3}
+    - {fileID: 5369129593601618969, guid: 4168eeac5e4fb864c8419532dc240cca, type: 3}
+    - {fileID: 2519512212638078316, guid: d8385515d9f389b4fb821dc0ac1763d8, type: 3}
     - {fileID: 5482619564264053497, guid: b6da761887ac1f4439d3fa995b668508, type: 3}
   selfInstance: {fileID: 11400000}

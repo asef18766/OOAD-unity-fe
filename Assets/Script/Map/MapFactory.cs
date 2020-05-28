@@ -15,11 +15,11 @@ namespace Map
         private static MapFactory _instance = null;
         private readonly Dictionary<PlatformTypes, float> _spawnRate = null;
         private List<IPlatform> _platforms = new List<IPlatform>();
-        private const float SpawnSpeed = 2.0f;
+        private const float SpawnSpeed = 1.5f;
 
-        private const float YLocation = 0;
-        private const float XMinLocation = 0;
-        private const float XMaxLocation = 0;
+        private const float YLocation = 5;
+        private const float XMinLocation = -7;
+        private const float XMaxLocation = 7;
 
         public static float PlatformScale = 2.0f;
         
@@ -58,10 +58,14 @@ namespace Map
         }
         private IEnumerator GeneratePlatform()
         {
-            yield return new WaitForSeconds(SpawnSpeed);
-            var platformType= ChoosePlatformType();
-            var xPos = Random.Range(XMinLocation, XMaxLocation);
-            CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
+            while(true)
+            {
+                yield return new WaitForSeconds(SpawnSpeed);
+                var platformType= ChoosePlatformType();
+                var xPos = Random.Range(XMinLocation, XMaxLocation);
+                Debug.Log($"xPos:{xPos}");
+                CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
+            }
         }
         
         /*
