@@ -3,6 +3,7 @@ using UnityEngine;
 using InputControllers.Pc;
 using InputControllers.Android;
 using SocketIO;
+using Network;
 
 namespace InputControllers
 {
@@ -13,7 +14,7 @@ namespace InputControllers
         private bool _pressed = false;
         private Vector2 _move = Vector2.zero;
         private SocketIOComponent _network;
-        private const Vector2[] _dir = new Vector2[3] { Vecto2.left, Vector2.zero, Vector2.right };
+        private readonly Vector2[] _dir = { Vector2.left, Vector2.zero, Vector2.right };
 
         public void Init(String input)
         {
@@ -69,8 +70,8 @@ namespace InputControllers
 
         private void _getOperation(SocketIOEvent e)
         {
-            _pressed = e.data["function"];
-            _move = _dir[e.data["move"] + 1];
+            _pressed = e.data["function"].b;
+            _move = _dir[(int)e.data["move"].n + 1];
         }
     }
 }
