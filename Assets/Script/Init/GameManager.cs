@@ -61,6 +61,7 @@ namespace Init
             {
                 StopCoroutine(_gameKiller);
             });
+            print($"receive raw {e}");
             if (e.data["success"].b)
             {
                 var uuid = new[]
