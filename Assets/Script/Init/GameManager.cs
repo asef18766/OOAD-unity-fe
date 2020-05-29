@@ -60,6 +60,7 @@ namespace Init
             {
                 StopCoroutine(_waitServer());
             });
+            print($"receive raw {e}");
             if (e.data["success"].b)
             {
                 var uuid = new[]
@@ -101,8 +102,11 @@ namespace Init
         {
             var network = NetworkManager.GetInstance().GetComponent();
             var secret = "14508888";
+            network.url = $"ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
+            network.Connect();
             network.On("serverCreated" , _serverCreated);
-            network.Emit("serverCreated" , JSONObject.Create($"{{\"token\":{secret}}}"));
+            network.Emit("serverCreated" , JSONObject.Create($"{{\"token\":\"{secret}\"}}"));
+
             StartCoroutine(_waitServer());
         }
         #endregion
