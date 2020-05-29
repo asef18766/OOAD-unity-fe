@@ -56,11 +56,17 @@ namespace Init
                     break;
                 case RuntimePlatform.LinuxPlayer:
                     break;
+                case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
                     if (GameChoice.Gamemode == GameMode.Offline)
                     {
                         creator = new PcOfflineConstructor();
+                        _buildPcOffline();
+                    }
+                    else
+                    {
+                        creator = new PcOnlineConstructor();
                         _buildPcOffline();
                     }
                     break;
