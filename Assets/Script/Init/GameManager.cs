@@ -1,6 +1,7 @@
 ﻿#define BUILD_SERVER
 using System;
 using System.Collections;
+using System.Runtime.InteropServices;
 using Init.Methods;
 using InputControllers.Pc;
 using Map;
@@ -58,7 +59,7 @@ namespace Init
         {
             UnityMainThread.Worker.AddJob(() =>
             {
-                StopCoroutine(_waitServer());
+                StopCoroutine(_gameKiller);
             });
             if (e.data["success"].b)
             {
@@ -97,13 +98,29 @@ namespace Init
             Application.Quit(-1);
             print("quit game");
         }
+
+        private IEnumerator _gameKiller;
         private void _buildOnlineServer()
         {
-            var network = NetworkManager.GetInstance().GetComponent();
+            UnityMainThread.Spawn();
+            
+            var manager= NetworkManager.GetInstance();
             var secret = "14508888";
+            
+            var network = manager.GetComponent();
+            network.url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
+            
+            var i = 0;
+            network.On("open" , (e) =>
+            {
+                if(i == 0)
+                    network.Emit("serverCreated" , JSONObject.Create($"{{\"token\":\"{secret}\"}}"));
+                i++;
+            });
             network.On("serverCreated" , _serverCreated);
-            network.Emit("serverCreated" , JSONObject.Create($"{{\"token\":{secret}}}"));
-            StartCoroutine(_waitServer());
+            network.Connect();
+            _gameKiller = _waitServer();
+            StartCoroutine(_gameKiller);
         }
         #endregion
         private void Awake()

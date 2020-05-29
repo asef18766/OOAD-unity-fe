@@ -37,10 +37,8 @@ namespace Event
             if (!_events.ContainsKey(eventName)) 
                 return;
             
-            Debug.Log($"list event: {_events[eventName].Count}");
             foreach (var action in _events[eventName])
             {
-                Debug.Log($"invoke {action}");
                 action(eventName,args);
             }
         }
