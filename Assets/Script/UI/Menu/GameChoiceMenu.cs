@@ -128,6 +128,7 @@ namespace UI.Menu
 
         private void OnDestroy()
         {
+            if (!NetworkManager.HasInstance()) return;
             var ioComponent = NetworkManager.GetInstance().GetComponent();
             ioComponent.Off("getServerName" , GetServerName);
             ioComponent.Off("open" , TestOpen);

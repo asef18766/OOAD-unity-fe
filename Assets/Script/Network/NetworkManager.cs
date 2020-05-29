@@ -5,8 +5,8 @@ namespace Network
 {
     public class NetworkManager
     {
-        private static SocketIOComponent _instance = null;
-        private static NetworkManager _self = null;
+        private static SocketIOComponent _instance;
+        private static NetworkManager _self;
         private NetworkManager()
         {
             if (_instance != null)
@@ -23,14 +23,14 @@ namespace Network
             return _self ?? (_self = new NetworkManager());
         }
 
+        public static bool HasInstance() => _instance != null;
+
         public SocketIOComponent GetComponent() => _instance;
 
         public void Clean()
         {
             if(_instance == null)
                 return;
-            
-            var ip = _instance.url;
             Object.Destroy(_instance.gameObject);
             
             var pref = PrefabManager.GetInstance().GetGameObject("Network");

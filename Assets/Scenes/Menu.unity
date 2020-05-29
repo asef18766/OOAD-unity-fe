@@ -1092,7 +1092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onlineScene: Lobby
-  offlineScene: 
+  offlineScene: GameScence
 --- !u!1 &397544912
 GameObject:
   m_ObjectHideFlags: 0

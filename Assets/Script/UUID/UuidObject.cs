@@ -15,5 +15,11 @@ namespace UUID
         {
             uuid = System.Guid.Parse(remoteId);
         }
+        public void ModifySelfId(System.Guid id)
+        {
+            UuidManager.GetInstance().Remove(uuid);
+            uuid = id;
+            UuidManager.GetInstance().Register(this);
+        }
     }
 }

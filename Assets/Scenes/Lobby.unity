@@ -754,6 +754,7 @@ MonoBehaviour:
   waitWindow: {fileID: 728768026}
   roomWindow: {fileID: 1886551098}
   errorWindow: {fileID: 113601277}
+  sceneName: GameScence
 --- !u!1 &500256059
 GameObject:
   m_ObjectHideFlags: 0

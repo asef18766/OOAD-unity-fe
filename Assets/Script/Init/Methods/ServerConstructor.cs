@@ -1,12 +1,12 @@
+﻿using Map.Platforms;
 using UnityEngine;
-using InputControllers;
 using System;
-using Map.Platforms;
+using InputControllers.Pc;
 using Object = UnityEngine.Object;
 
 namespace Init.Methods
 {
-    public class PcOnlineConstructor : IObjectConstructor
+    public class ServerConstructor : IObjectConstructor
     {
         private static PrefabManager _prefabManager;
         public Player PlayerConstructor(Vector3 pos, Vector2 scale, PlayerState iniState)
@@ -26,8 +26,7 @@ namespace Init.Methods
             var playerObject = Object.Instantiate(playerPrefab);
             playerObject.transform.position = pos;
             playerObject.transform.localScale = scale;
-            var controller = playerObject.AddComponent<OnlinePlayerController>();
-            controller.Init("pc");
+            var controller = playerObject.AddComponent<PcPlayerController>();
             var player = playerObject.GetComponent<Player>();
             player.InitPlayer(controller , iniState);
             return player;
@@ -42,26 +41,26 @@ namespace Init.Methods
                     throw new Exception("get null prefab manager");
                 _prefabManager = pIns;
             }
-            GameObject gameObject;
+            GameObject gameObject=null;
             switch (type)
             {
                 case PlatformTypes.Direction:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("DirectionPlatform");
                     break;
                 case PlatformTypes.Fragile:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("FragilePlatform");
                     break;
                 case PlatformTypes.Freeze:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("FreezePlatform");
                     break;
                 case PlatformTypes.Normal:
                     gameObject = _prefabManager.GetGameObject("NormalPlatform");
                     break;
                 case PlatformTypes.Spike:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("SpikePlatform");
                     break;
                 case PlatformTypes.Time:
-                    throw new NotImplementedException();
+                    gameObject = _prefabManager.GetGameObject("TimePlatform");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,7 +21,12 @@ namespace UI.Menu
             switch (GameChoice.Gamemode)
             {
                 case GameMode.Offline:
-                    throw new NotImplementedException("not implemented yet...QQ");
+                    if (NetworkManager.HasInstance())
+                    {
+                        Destroy(NetworkManager.GetInstance().GetComponent().gameObject);
+                    }
+                    SceneManager.LoadScene(offlineScene);
+                    break;
                 case GameMode.Online:
                     SceneManager.LoadScene(onlineScene);
                     break;
