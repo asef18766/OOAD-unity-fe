@@ -10,7 +10,6 @@ namespace InputControllers
     public class OnlinePlayerController : MonoBehaviour, IPlayerController
     {
         private IPlayerController _controller;
-        private bool _online = true;
         private bool _pressed = false;
         private Vector2 _move = Vector2.zero;
         private SocketIOComponent _network;
@@ -39,27 +38,15 @@ namespace InputControllers
             _network.Connect();
         }
 
-        private void Awake()
-        {
-        }
-
         void Update()
         {
-            if (_online)
-            {
-                int move;
-                if (_controller.OnMove().x > 0) move = 1;
-                else if (_controller.OnMove().x == 0) move = 0;
-                else move = -1;
+            int move;
+            if (_controller.OnMove().x > 0) move = 1;
+            else if (_controller.OnMove().x == 0) move = 0;
+            else move = -1;
 
-                var jsonObject = new JSONObject($"{{\"move\":{move},\"function\":{_controller.OnClicked()}}}");
-                _network.Emit("operation", jsonObject);
-            }
-            else
-            {
-                _pressed = _controller.OnClicked();
-                _move = _controller.OnMove();
-            }
+            var jsonObject = new JSONObject($"{{\"move\":{move},\"function\":{_controller.OnClicked()}}}");
+            _network.Emit("operation", jsonObject);
         }
 
         public bool OnClicked()
