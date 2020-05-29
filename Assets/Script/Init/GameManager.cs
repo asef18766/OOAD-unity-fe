@@ -54,7 +54,7 @@ namespace Init
                 case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
-                    if (false)//*GameChoice.Gamemode == GameMode.Offline)
+                    if (GameChoice.Gamemode == GameMode.Offline)
                     {
                         creator = new PcOfflineConstructor();
                         _buildPcOffline();

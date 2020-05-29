@@ -33,9 +33,9 @@ namespace InputControllers
             _network = NetworkManager.GetInstance().GetComponent();
             _network.On("operation", _getOperation);
 
-            // for testing
+            /* for testing
             _network.url = $"ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
-            _network.Connect();
+            _network.Connect();*/
         }
 
         void Update()
