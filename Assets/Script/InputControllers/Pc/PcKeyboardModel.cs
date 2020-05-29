@@ -4,7 +4,7 @@ namespace InputControllers.Pc
 {
     public class PcKeyboardModel : MonoBehaviour
     { 
-        [SerializeField] private KeyCode clicked = KeyCode.Space;
+        [SerializeField] public KeyCode clicked = KeyCode.Space;
         /*
          * 0 for up
          * 1 for down

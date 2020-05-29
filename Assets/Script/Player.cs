@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Event;
 using InputControllers;
+using ThreadUtils;
 using UnityEngine;
 using UUID;
 
@@ -17,9 +19,38 @@ public class Player : UuidObject
     [SerializeField] private IPlayerController controller;
     [SerializeField] private float moveScale = 0.3f;
     [SerializeField] private float jumpScale = 3.0f;
+    [SerializeField] private float attackRange = 1.0f;
+    [SerializeField] private float attackCd = 1.0f;
+    [SerializeField] private int health = 100;
+    [SerializeField] private int strength = 10;
+    private static readonly Vector2 AttackDirection = Vector2.up;
+
+
+    private IEnumerator _hurt(int dmg)
+    {
+        print($"{gameObject.name} hurt for {dmg}");
+        health -= dmg;
+        if (health <= 0)
+        {
+            GameRound.Instance.EndGame();
+        }
+        yield return null;
+    }
     private IEnumerator _attack()
     {
-        yield break;
+        var buffer = new RaycastHit2D[10];
+        var position = transform.position;
+        var items = Physics2D.RaycastNonAlloc(position,AttackDirection,buffer,attackRange);
+        
+        for (var i = 0; i < items; i++)
+        {
+            if (!buffer[i].collider.gameObject.CompareTag("Player")) continue;
+            var entity = buffer[i].collider.gameObject.GetComponent<Player>();
+            if(entity.gameObject == gameObject) continue;
+            entity.StartCoroutine(nameof(_hurt) , strength);
+        }
+        yield return new WaitForSeconds(attackCd);
+        _triggered = false;
     }
     
     private bool _triggered;
@@ -58,6 +89,11 @@ public class Player : UuidObject
     private void Awake()
     { 
         _rb = GetComponent<Rigidbody2D>();
+        EventManager.GetInstance().RegisterEvent("swap"  , (s, o) =>
+        {
+            _rb.gravityScale *= -1;
+            _click = (_click == nameof(_jump)) ? nameof(_attack) : nameof(_jump);
+        });
     }
 
     private void Update()

@@ -30,7 +30,7 @@ namespace Init
                 creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
 
             const int pScale = 4;
-            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump);
+            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump).name = "p1";
             var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
             p2.GetComponent<PcKeyboardModel>().walk = new[]
             {
@@ -39,6 +39,11 @@ namespace Init
                 KeyCode.LeftArrow,
                 KeyCode.RightArrow
             };
+            p2.GetComponent<PcKeyboardModel>().clicked = KeyCode.KeypadEnter;
+            p2.name = "p2";
+
+            var round = new GameObject("GameRound");
+            round.AddComponent<GameRound>();
         }
 
         #endregion

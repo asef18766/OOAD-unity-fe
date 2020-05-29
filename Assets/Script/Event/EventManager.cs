@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Event
 {
@@ -17,9 +19,11 @@ namespace Event
         {
             if (!_events.ContainsKey(eventName))
             {
+                Debug.Log($"create list with eventName {eventName}");
                 _events.Add(eventName , new List<Action<string,JSONObject>>());
             }
-            _events[eventName].Append(handler);
+            _events[eventName].Add(handler);
+            Debug.Log($"register successfully with event name {eventName}");
         }
         public void UnRegisterEvent(string eventName, Action<string,JSONObject> handler)
         {
@@ -33,8 +37,10 @@ namespace Event
             if (!_events.ContainsKey(eventName)) 
                 return;
             
+            Debug.Log($"list event: {_events[eventName].Count}");
             foreach (var action in _events[eventName])
             {
+                Debug.Log($"invoke {action}");
                 action(eventName,args);
             }
         }
