@@ -1,4 +1,4 @@
-﻿#define BUILD_SERVER
+﻿//#define BUILD_SERVER
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -18,10 +18,13 @@ namespace Init
         public static GameManager Instance { get; private set; }
         public IObjectConstructor creator;
 
+        [SerializeField] private Transform canvas;
+
         #region offline_PC_implementation
 
         private void _buildPcOffline()
         {
+            #region map_creation
             var locations = new[]
             {
                 new Vector2(1.75f , 3.45f),
@@ -35,7 +38,8 @@ namespace Init
             MapFactory.PlatformScale = 2;
             foreach (var location in locations)
                 creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
-
+            #endregion
+            #region player_creation
             const int pScale = 4;
             creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump).name = "p1";
             var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
@@ -48,9 +52,13 @@ namespace Init
             };
             p2.GetComponent<PcKeyboardModel>().clicked = KeyCode.KeypadEnter;
             p2.name = "p2";
+            #endregion
 
             var round = new GameObject("GameRound");
             round.AddComponent<GameRound>();
+            
+            var ui = PrefabManager.GetInstance().GetGameObject("UIController");
+            Instantiate(ui , canvas);
         }
 
         #endregion

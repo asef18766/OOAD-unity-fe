@@ -4,7 +4,8 @@ namespace Map.Platforms
 {
     public class FragilePlatform : UuidObject , IPlatform
     {
-        private float _speed = 1;
+        //TODO: finish implementation
+        private float _speed = MapFactory.GlobalSpeed;
 
         [SerializeField] private float scale = 1.0f;
         public void SetSpeed(float speed)

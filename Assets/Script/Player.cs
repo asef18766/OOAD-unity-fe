@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using Event;
 using InputControllers;
-using ThreadUtils;
 using UnityEngine;
 using UUID;
 
@@ -25,7 +24,7 @@ public class Player : UuidObject
     [SerializeField] private int strength = 10;
     private static readonly Vector2 AttackDirection = Vector2.up;
 
-
+    private static readonly JSONObject _hurtMsgFormat = new JSONObject("{\"playerName\":\"yee\" , \"health\":87 , \"dmg\":87}");
     private IEnumerator _hurt(int dmg)
     {
         print($"{gameObject.name} hurt for {dmg}");
@@ -34,6 +33,12 @@ public class Player : UuidObject
         {
             GameRound.Instance.EndGame();
         }
+
+        JSONObject jSONObject = _hurtMsgFormat.Copy();
+        jSONObject["playerName"].str =  this.gameObject.name;
+        jSONObject["health"].n = health;
+        jSONObject["dmg"].n = dmg;
+        _eventManager.InvokeEvent("playerHurt" , jSONObject);
         yield return null;
     }
     private IEnumerator _attack()
@@ -85,11 +90,12 @@ public class Player : UuidObject
     }
 
     private Rigidbody2D _rb;
-
+    private EventManager _eventManager;
     private void Awake()
     { 
         _rb = GetComponent<Rigidbody2D>();
-        EventManager.GetInstance().RegisterEvent("swap"  , (s, o) =>
+        _eventManager = EventManager.GetInstance();
+        _eventManager.RegisterEvent("swap"  , (s, o) =>
         {
             _rb.gravityScale *= -1;
             _click = (_click == nameof(_jump)) ? nameof(_attack) : nameof(_jump);

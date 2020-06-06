@@ -12,6 +12,7 @@ namespace Map
 {
     public class MapFactory
     {
+        public static readonly float GlobalSpeed = 0;
         private static MapFactory _instance;
         private readonly Dictionary<PlatformTypes, float> _spawnRate;
         private const float SpawnSpeed = 1.5f;
