@@ -141,6 +141,9 @@ namespace Init
         #endregion
         private void Awake()
         {
+            if(PrefabManager.GetInstance() == null)
+                throw new ApplicationException("can not init prefab manager");
+            
             Instance = this;
             #if BUILD_SERVER
             GameChoice.Gamemode = GameMode.Server;
