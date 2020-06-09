@@ -1,36 +1,19 @@
 using UnityEngine;
-using InputControllers;
 using System;
+using InputControllers.Network.Client;
 using Map.Platforms;
 using Object = UnityEngine.Object;
 
 namespace Init.Methods
 {
-    public class PcOnlineConstructor : IObjectConstructor
+    public class OnlineClientConstructor : IObjectConstructor
     {
         private static PrefabManager _prefabManager;
         public Player PlayerConstructor(Vector3 pos, Vector2 scale, PlayerState iniState)
         {
-            if (_prefabManager == null)
-            {
-                var pIns = PrefabManager.GetInstance();
-                if(pIns == null)
-                    throw new Exception("get null prefab manager");
-                _prefabManager = pIns;
-            }
-
-            var playerPrefab = _prefabManager.GetGameObject("Player");
-            if(playerPrefab == null)
-                throw new Exception("get null player prefab");
-            
-            var playerObject = Object.Instantiate(playerPrefab);
-            playerObject.transform.position = pos;
-            playerObject.transform.localScale = scale;
-            var controller = playerObject.AddComponent<OnlinePlayerController>();
-            controller.Init("pc");
-            var player = playerObject.GetComponent<Player>();
-            player.InitPlayer(controller , iniState);
-            return player;
+            var playerObject = new GameObject();
+            playerObject.AddComponent<OnlinePlayerClientController>().Init();
+            return null;
         }
 
         public IPlatform PlatformConstructor(Vector3 pos, Vector2 scale, PlatformTypes type)

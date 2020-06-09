@@ -1,13 +1,14 @@
 using System;
+using Init.Methods;
 using UnityEngine;
 using InputControllers.Pc;
 using InputControllers.Android;
 using SocketIO;
 using Network;
 
-namespace InputControllers
+namespace InputControllers.Network.Client
 {
-    public class OnlinePlayerController : MonoBehaviour, IPlayerController
+    public class OnlinePlayerClientController : MonoBehaviour, IPlayerController
     {
         private IPlayerController _controller;
         private bool _pressed = false;
@@ -15,34 +16,31 @@ namespace InputControllers
         private SocketIOComponent _network;
         private readonly Vector2[] _dir = { Vector2.left, Vector2.zero, Vector2.right };
 
-        public void Init(String input)
+        public void Init()
         {
-            switch (input)
+            switch (Application.platform)
             {
-                case "pc":
-                    _controller = gameObject.AddComponent<PcPlayerController>();
-                    break;
-                case "android":
+                case RuntimePlatform.Android:
                     _controller = gameObject.AddComponent<AppPlayerController>();
                     break;
-                default:
-                    Debug.Log("unknown input");
+                case RuntimePlatform.WindowsEditor:
+                case RuntimePlatform.WindowsPlayer:
+                case RuntimePlatform.OSXEditor:
+                case RuntimePlatform.OSXPlayer:
+                    _controller = gameObject.AddComponent<PcPlayerController>();
                     break;
+                default:
+                    throw new ArgumentException("Unknown Argument");
             }
-
             _network = NetworkManager.GetInstance().GetComponent();
             _network.On("operation", _getOperation);
-
-            /* for testing
-            _network.url = $"ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
-            _network.Connect();*/
         }
 
         void Update()
         {
             int move;
             if (_controller.OnMove().x > 0) move = 1;
-            else if (_controller.OnMove().x == 0) move = 0;
+            else if (Math.Abs(_controller.OnMove().x) < float.Epsilon) move = 0;
             else move = -1;
 
             var jsonObject = new JSONObject($"{{\"move\":{move},\"function\":{_controller.OnClicked()}}}");

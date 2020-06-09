@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Network;
+using SocketIO;
 
 namespace UUID
 {
@@ -31,6 +33,43 @@ namespace UUID
         {
             if(_data.ContainsKey(uuid))
                 _data.Remove(uuid);
+        }
+        public void HookNetworking()
+        {
+            NetworkManager.GetInstance().GetComponent().On("updateEntity" , _onUpdateEntity);
+        }
+        public void UnHookNetworking()
+        {
+            NetworkManager.GetInstance().GetComponent().Off("updateEntity" , _onUpdateEntity);
+        }
+        
+        /*
+         * format:
+         * {
+         *     "uuid":String ,
+         *     "parent":String ,
+         *     "transform":
+         *     {
+         *         "position":[0,0,0] ,
+         *         "rotation":[0,0,0] ,
+         *         "scale":[0,0,0]
+         *     },
+         *     "prefab":String
+         * }
+        */
+        private void _instantiateObject(JSONObject jsonObject)
+        {
+            var guid = Guid.Parse(jsonObject["uuid"].str);
+            var parent = jsonObject["parent"].str;
+            throw new NotImplementedException();
+        }
+        
+        private void _onUpdateEntity(SocketIOEvent e)
+        {
+            var cmd = e.data["type"].str;
+            var args = e.data["args"];
+            
+            throw new NotImplementedException();
         }
     }
 }

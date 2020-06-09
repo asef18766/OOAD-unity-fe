@@ -10,6 +10,7 @@ using Network;
 using SocketIO;
 using ThreadUtils;
 using UnityEngine;
+using UUID;
 
 namespace Init
 {
@@ -93,8 +94,7 @@ namespace Init
                     p2.name = "p2";
                     p1.ModifySelfId(uuid[0]);
                     p2.ModifySelfId(uuid[1]);
-                    var round = new GameObject("GameRound");
-                    round.AddComponent<GameRound>();
+                    
                 });
             }
             else
@@ -132,6 +132,13 @@ namespace Init
             StartCoroutine(_gameKiller);
         }
         #endregion
+        #region online_client_implementation
+        private void _buildOnlineClient()
+        {
+            UuidManager.GetInstance().HookNetworking();
+            creator.PlayerConstructor(Vector3.zero , Vector2.zero, PlayerState.Jump);
+        }
+        #endregion
         private void Awake()
         {
             Instance = this;
@@ -154,7 +161,7 @@ namespace Init
                     }
                     else if(GameChoice.Gamemode == GameMode.Online)
                     {
-                        creator = new PcOnlineConstructor();
+                        creator = new OnlineClientConstructor();
                         _buildPcOffline();
                     }
                     else if (GameChoice.Gamemode == GameMode.Server)
