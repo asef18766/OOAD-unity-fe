@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Event;
 using InputControllers;
 using UnityEngine;
@@ -24,7 +23,7 @@ public class Player : UuidObject
     [SerializeField] private int strength = 10;
     private static readonly Vector2 AttackDirection = Vector2.up;
 
-    private static readonly JSONObject _hurtMsgFormat = new JSONObject("{\"playerName\":\"yee\" , \"health\":87 , \"dmg\":87}");
+    private static readonly JSONObject HurtMsgFormat = new JSONObject("{\"playerName\":\"yee\" , \"health\":87 , \"dmg\":87}");
     private IEnumerator _hurt(int dmg)
     {
         print($"{gameObject.name} hurt for {dmg}");
@@ -34,11 +33,11 @@ public class Player : UuidObject
             GameRound.Instance.EndGame();
         }
 
-        JSONObject jSONObject = _hurtMsgFormat.Copy();
-        jSONObject["playerName"].str =  this.gameObject.name;
-        jSONObject["health"].n = health;
-        jSONObject["dmg"].n = dmg;
-        _eventManager.InvokeEvent("playerHurt" , jSONObject);
+        JSONObject jSonObject = HurtMsgFormat.Copy();
+        jSonObject["playerName"].str =  this.gameObject.name;
+        jSonObject["health"].n = health;
+        jSonObject["dmg"].n = dmg;
+        _eventManager.InvokeEvent("playerHurt" , jSonObject);
         yield return null;
     }
     private IEnumerator _attack()
@@ -114,7 +113,7 @@ public class Player : UuidObject
             transform.Translate(move * moveScale);
     }
 
-    private bool _touchedGround = false;
+    private bool _touchedGround;
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.CompareTag("Platform"))
