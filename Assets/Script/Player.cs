@@ -127,7 +127,9 @@ public class Player : UuidObject
         var move = controller.OnMove();
         if (move != Vector2.zero)
         {
-            
+            /*
+            if(move == Vector2.left)
+                move = move * left*/
             transform.Translate(move * moveScale);
         }
     }

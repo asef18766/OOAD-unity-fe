@@ -20,7 +20,7 @@ namespace Map.Platforms
         [SerializeField] private Sprite rightArrow, swap , brick , add , subtract;
         [SerializeField] private float scale = 1.0f;
         private DirectionPlatformMode _type;
-        
+        private bool _accelerate;
         private readonly Dictionary<DirectionPlatformMode, float> _spawnRate=new Dictionary<DirectionPlatformMode, float>()
         {
             {DirectionPlatformMode.LeftPlatform , 0.4f},
@@ -53,12 +53,14 @@ namespace Map.Platforms
                     criticalSprite[1].sprite = rightArrow;
                     criticalSprite[1].flipX = true;
                     criticalSprite[2].sprite = brick;
+                    _accelerate = Random.Range(0, 2) == 0;
                     break;
                 case DirectionPlatformMode.RightPlatform:
                     _type = DirectionPlatformMode.RightPlatform;
                     criticalSprite[0].sprite = brick;
                     criticalSprite[1].sprite = rightArrow;
                     criticalSprite[2].sprite = brick;
+                    _accelerate = Random.Range(0, 2) == 0;
                     break;
                 case DirectionPlatformMode.SwapPlatform:
                     _type = DirectionPlatformMode.SwapPlatform;
