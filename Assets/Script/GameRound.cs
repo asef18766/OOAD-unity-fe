@@ -8,8 +8,8 @@ public class GameRound : MonoBehaviour
     [SerializeField] private float roundTime = 10.2f;
     [SerializeField] private float updateRate = 0.9f;
 
-    private static readonly JSONObject updateSwapTimeFormat = new JSONObject("{\"time\":87}");
-    private float remainTime
+    private static readonly JSONObject UpdateSwapTimeFormat = new JSONObject("{\"time\":87}");
+    private float RemainTime
     {
         set
         {
@@ -19,20 +19,17 @@ public class GameRound : MonoBehaviour
                 _remainTime = roundTime;
                 _eventManager.InvokeEvent("swap" , JSONObject.nullJO);
             }
-            var arg = updateSwapTimeFormat.Copy();
+            var arg = UpdateSwapTimeFormat.Copy();
             arg["time"].n = _remainTime;
             _eventManager.InvokeEvent("updateSwapTime" , arg);
         }
-        get
-        {
-            return _remainTime;
-        }
+        get => _remainTime;
     }
     private float _remainTime = 10.2f;
     private EventManager _eventManager;
     private IEnumerator _minusTime(float amount)
     {
-        remainTime = remainTime - amount;
+        RemainTime -= amount;
         yield break;
     }
     private IEnumerator _swapRound()
@@ -40,7 +37,7 @@ public class GameRound : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(updateRate);
-            remainTime = remainTime - updateRate;
+            RemainTime -= updateRate;
         }
     }
 
@@ -54,7 +51,7 @@ public class GameRound : MonoBehaviour
     {
         _eventManager = EventManager.GetInstance();
         Instance = this;
-        remainTime = roundTime;
+        RemainTime = roundTime;
         StartCoroutine(_swapRound());
     }
 }

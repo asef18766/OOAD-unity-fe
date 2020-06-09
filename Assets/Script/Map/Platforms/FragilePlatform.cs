@@ -1,3 +1,4 @@
+using Init;
 using UnityEngine;
 using UUID;
 namespace Map.Platforms
@@ -16,6 +17,13 @@ namespace Map.Platforms
         private void Update()
         {
             transform.Translate(Vector3.down * (Time.deltaTime * scale * _speed));
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if(other.collider.CompareTag("Player")) return;
+            GameManager.Instance.creator.PlatformConstructor(transform.position , Vector2.one*MapFactory.PlatformScale , PlatformTypes.Normal);
+            Destroy(gameObject);
         }
     } 
 }

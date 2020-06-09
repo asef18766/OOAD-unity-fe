@@ -21,8 +21,9 @@ public class Player : UuidObject
     [SerializeField] private float attackCd = 1.0f;
     [SerializeField] private int health = 100;
     [SerializeField] private int strength = 10;
+    [SerializeField] private float freezeTime = 1.0f;
     private static readonly Vector2 AttackDirection = Vector2.up;
-
+    public float leftAccelerate = 1.0f, rightAccelerate = 1.0f;
     private static readonly JSONObject HurtMsgFormat = new JSONObject("{\"playerName\":\"yee\" , \"health\":87 , \"dmg\":87}");
     private IEnumerator _hurt(int dmg)
     {
@@ -56,7 +57,22 @@ public class Player : UuidObject
         yield return new WaitForSeconds(attackCd);
         _triggered = false;
     }
-    
+
+    private IEnumerator _freeze()
+    {
+        var oldScales = new[]
+        {
+            moveScale,
+            jumpScale
+        };
+        moveScale = 0;
+        jumpScale = 0;
+        _triggered = true;
+        yield return new WaitForSeconds(freezeTime);
+        moveScale = oldScales[0];
+        jumpScale = oldScales[1];
+        _triggered = false;
+    }
     private bool _triggered;
     private IEnumerator _jump()
     {
@@ -109,8 +125,11 @@ public class Player : UuidObject
             StartCoroutine(_click);
         }
         var move = controller.OnMove();
-        if(move != Vector2.zero)
+        if (move != Vector2.zero)
+        {
+            
             transform.Translate(move * moveScale);
+        }
     }
 
     private bool _touchedGround;

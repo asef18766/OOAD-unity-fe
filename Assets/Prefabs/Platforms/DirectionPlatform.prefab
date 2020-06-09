@@ -240,6 +240,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8ccf490b504940942c7fb38d4ea11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  criticalSprite:
+  - {fileID: 1314723901515058370}
+  - {fileID: 1314723900624643426}
+  - {fileID: 1314723901126869392}
+  rightArrow: {fileID: 8198906874348045390, guid: d02f2e5e4b797ae4aba330d2fb187839,
+    type: 3}
+  swap: {fileID: -4871547514942784699, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  brick: {fileID: 6741368569237755234, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  add: {fileID: 1328938282632780196, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  subtract: {fileID: -7571962286574281417, guid: d02f2e5e4b797ae4aba330d2fb187839,
+    type: 3}
   scale: 1
 --- !u!50 &-2431367830656240927
 Rigidbody2D:
