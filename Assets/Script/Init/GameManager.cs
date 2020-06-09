@@ -1,4 +1,4 @@
-﻿//#define BUILD_SERVER
+﻿#define BUILD_SERVER
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -152,6 +152,7 @@ namespace Init
                 case RuntimePlatform.LinuxPlayer:
                     break;
                 case RuntimePlatform.OSXEditor:
+                case RuntimePlatform.OSXPlayer:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
                     if (GameChoice.Gamemode == GameMode.Offline)
@@ -169,8 +170,6 @@ namespace Init
                         creator = new ServerConstructor();
                         _buildOnlineServer();
                     }
-                    break;
-                case RuntimePlatform.OSXPlayer:
                     break;
                 default:
                     throw new ArgumentException($"does not support at platform {Application.platform}");

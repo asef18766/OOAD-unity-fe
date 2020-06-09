@@ -1,7 +1,7 @@
 ﻿using Map.Platforms;
 using UnityEngine;
 using System;
-using InputControllers.Pc;
+using InputControllers.Network.Server;
 using Object = UnityEngine.Object;
 
 namespace Init.Methods
@@ -26,7 +26,7 @@ namespace Init.Methods
             var playerObject = Object.Instantiate(playerPrefab);
             playerObject.transform.position = pos;
             playerObject.transform.localScale = scale;
-            var controller = playerObject.AddComponent<PcPlayerController>();
+            var controller = playerObject.AddComponent<OperationEventListener>();
             var player = playerObject.GetComponent<Player>();
             player.InitPlayer(controller , iniState);
             return player;
