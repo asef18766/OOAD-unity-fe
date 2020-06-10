@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Event;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameRound : MonoBehaviour
 {
@@ -41,11 +43,28 @@ public class GameRound : MonoBehaviour
         }
     }
 
-    public void EndGame()
+    private bool _isGameEnded = false;
+    public void EndGame(string loser)
     {
+        if(_isGameEnded) return;
+        EventManager.GetInstance().Clean();
         print("game ended");
         _eventManager.InvokeEvent("endGame" , JSONObject.nullJO);
         StopAllCoroutines();
+        GameChoice.Winner = (loser == "p1") ? "p2" : "p1";
+
+        switch (GameChoice.GameMode)
+        {
+            case GameMode.Offline:
+                SceneManager.LoadScene("EndScence");
+                break;
+            case GameMode.Online:
+                break;
+            case GameMode.Server:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
     private void Start()
     {

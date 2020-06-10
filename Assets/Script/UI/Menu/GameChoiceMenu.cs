@@ -46,10 +46,10 @@ namespace UI.Menu
             switch (_dropdown.options[index].text)
             {
                 case "Offline":
-                    GameChoice.Gamemode = GameMode.Offline;
+                    GameChoice.GameMode = GameMode.Offline;
                     break;
                 case "Default Server":
-                    GameChoice.Gamemode = GameMode.Online;
+                    GameChoice.GameMode = GameMode.Online;
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
@@ -62,7 +62,7 @@ namespace UI.Menu
                     _dropdown.value = 0;
                     break;
                 default:
-                    GameChoice.Gamemode = GameMode.Online;
+                    GameChoice.GameMode = GameMode.Online;
                     var dest = _dropdown.options[index].text;
                     manager = NetworkManager.GetInstance();
                     manager.Clean();

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Event;
+using UnityEngine;
 
 namespace ThreadUtils
 {
@@ -9,6 +10,7 @@ namespace ThreadUtils
         {
             DontDestroyOnLoad(this);
             Runner = this;
+            EventManager.GetInstance().RegisterEvent("endGame" , (s, o) => StopAllCoroutines());
         }
         
     }

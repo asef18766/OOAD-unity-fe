@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Event;
 using InputControllers;
 using UnityEngine;
@@ -13,7 +14,11 @@ public enum PlayerState
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : UuidObject
 {
-    private string _click = "";
+    public List<Action<Vector2>> moveCallBack = new List<Action<Vector2>>();
+    public List<Action<string>> clickCallBack = new List<Action<string>>();
+    public List<Tuple<Action<Player> , Action<Player>>> freezeCallBack = new List<Tuple<Action<Player> , Action<Player>>>();
+    
+    public float leftAccelerate = 1.0f, rightAccelerate = 1.0f;
     [SerializeField] private IPlayerController controller;
     [SerializeField] private float moveScale = 0.3f;
     [SerializeField] private float jumpScale = 3.0f;
@@ -23,7 +28,12 @@ public class Player : UuidObject
     [SerializeField] private int strength = 10;
     [SerializeField] private float freezeTime = 1.0f;
     private static readonly Vector2 AttackDirection = Vector2.up;
-    public float leftAccelerate = 1.0f, rightAccelerate = 1.0f;
+    private string _click = "";
+    private bool _triggered;
+    private Rigidbody2D _rb;
+    private EventManager _eventManager;
+    private bool _touchedGround;
+    #region hurt_event_implement
     private static readonly JSONObject HurtMsgFormat = new JSONObject("{\"playerName\":\"yee\" , \"health\":87 , \"dmg\":87}");
     private IEnumerator _hurt(int dmg)
     {
@@ -31,7 +41,7 @@ public class Player : UuidObject
         health -= dmg;
         if (health <= 0)
         {
-            GameRound.Instance.EndGame();
+            GameRound.Instance.EndGame(gameObject.name);
         }
 
         JSONObject jSonObject = HurtMsgFormat.Copy();
@@ -41,6 +51,8 @@ public class Player : UuidObject
         _eventManager.InvokeEvent("playerHurt" , jSonObject);
         yield return null;
     }
+    #endregion
+    #region attack_event_implementation
     private IEnumerator _attack()
     {
         var buffer = new RaycastHit2D[10];
@@ -57,9 +69,11 @@ public class Player : UuidObject
         yield return new WaitForSeconds(attackCd);
         _triggered = false;
     }
-
+    #endregion
+    #region freeze_event_implementation
     private IEnumerator _freeze()
     {
+        foreach (var callbacks in freezeCallBack) callbacks.Item1(this);
         var oldScales = new[]
         {
             moveScale,
@@ -72,8 +86,10 @@ public class Player : UuidObject
         moveScale = oldScales[0];
         jumpScale = oldScales[1];
         _triggered = false;
+        foreach (var callbacks in freezeCallBack) callbacks.Item2(this);
     }
-    private bool _triggered;
+    #endregion
+    #region jump_event_implementation
     private IEnumerator _jump()
     {
         if(!_touchedGround)
@@ -86,6 +102,8 @@ public class Player : UuidObject
         }
         _triggered = false;
     }
+    #endregion
+    
     public IEnumerator ResetSpeed()
     {
         print("reset speed");
@@ -109,10 +127,7 @@ public class Player : UuidObject
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
     }
-
-    private Rigidbody2D _rb;
-    private EventManager _eventManager;
-    private void Start()
+    private void Awake()
     { 
         _rb = GetComponent<Rigidbody2D>();
         _eventManager = EventManager.GetInstance();
@@ -123,10 +138,18 @@ public class Player : UuidObject
         });
     }
 
+    private void _endGame()
+    {
+        StopAllCoroutines();
+        _triggered = true;
+        moveScale = 0;
+    }
+
     private void Update()
     {
         if (controller.OnClicked() && !_triggered)
         {
+            foreach (var act in clickCallBack) act(_click);
             _triggered = true;
             StartCoroutine(_click);
         }
@@ -140,9 +163,9 @@ public class Player : UuidObject
             
             transform.Translate(move * moveScale);
         }
+        
+        foreach (var act in moveCallBack) act(move);
     }
-
-    private bool _touchedGround;
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.CompareTag("Platform"))

@@ -18,7 +18,7 @@ namespace UI.Menu
 
         private void OnClick()
         {
-            switch (GameChoice.Gamemode)
+            switch (GameChoice.GameMode)
             {
                 case GameMode.Offline:
                     if (NetworkManager.HasInstance())
@@ -34,7 +34,7 @@ namespace UI.Menu
                     print("you dirty hacker :P");
                     break;
                 default:
-                    throw new ArgumentException($"receive unexpected option {GameChoice.Gamemode}");
+                    throw new ArgumentException($"receive unexpected option {GameChoice.GameMode}");
             }
         }
     }

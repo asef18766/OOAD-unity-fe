@@ -53,8 +53,8 @@ namespace Map.Platforms
                     _accelerate = Random.Range(0, 2) == 0;
                     criticalSprite[0].sprite = (_accelerate)? add:subtract;
                     criticalSprite[1].sprite = rightArrow;
-                    criticalSprite[1].flipX = (_accelerate)? add:subtract;
-                    criticalSprite[2].sprite = brick;
+                    criticalSprite[1].flipX = true;
+                    criticalSprite[2].sprite = (_accelerate)? add:subtract;
                     break;
                 case DirectionPlatformMode.RightPlatform:
                     _type = DirectionPlatformMode.RightPlatform;
