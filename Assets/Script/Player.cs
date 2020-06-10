@@ -88,6 +88,7 @@ public class Player : UuidObject
     }
     public IEnumerator ResetSpeed()
     {
+        print("reset speed");
         leftAccelerate = 1;
         rightAccelerate = 1;
         yield break;
@@ -111,7 +112,7 @@ public class Player : UuidObject
 
     private Rigidbody2D _rb;
     private EventManager _eventManager;
-    private void Awake()
+    private void Start()
     { 
         _rb = GetComponent<Rigidbody2D>();
         _eventManager = EventManager.GetInstance();

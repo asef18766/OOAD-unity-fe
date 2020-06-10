@@ -50,18 +50,18 @@ namespace Map.Platforms
             {
                 case DirectionPlatformMode.LeftPlatform:
                     _type = DirectionPlatformMode.LeftPlatform;
-                    criticalSprite[0].sprite = brick;
-                    criticalSprite[1].sprite = rightArrow;
-                    criticalSprite[1].flipX = true;
-                    criticalSprite[2].sprite = brick;
                     _accelerate = Random.Range(0, 2) == 0;
+                    criticalSprite[0].sprite = (_accelerate)? add:subtract;
+                    criticalSprite[1].sprite = rightArrow;
+                    criticalSprite[1].flipX = (_accelerate)? add:subtract;
+                    criticalSprite[2].sprite = brick;
                     break;
                 case DirectionPlatformMode.RightPlatform:
                     _type = DirectionPlatformMode.RightPlatform;
-                    criticalSprite[0].sprite = brick;
-                    criticalSprite[1].sprite = rightArrow;
-                    criticalSprite[2].sprite = brick;
                     _accelerate = Random.Range(0, 2) == 0;
+                    criticalSprite[0].sprite = (_accelerate)? add:subtract;
+                    criticalSprite[1].sprite = rightArrow;
+                    criticalSprite[2].sprite = (_accelerate)? add:subtract;
                     break;
                 case DirectionPlatformMode.SwapPlatform:
                     _type = DirectionPlatformMode.SwapPlatform;
@@ -99,8 +99,7 @@ namespace Map.Platforms
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        private void OnCollisionExit(Collision other)
+        private void OnCollisionExit2D(Collision2D other)
         {
             if(!other.gameObject.CompareTag("Player")) return;
             other.gameObject.GetComponent<Player>().StartCoroutine(nameof(Player.ResetSpeed));

@@ -1,7 +1,6 @@
 ﻿#define BUILD_SERVER
 using System;
 using System.Collections;
-using System.Runtime.InteropServices;
 using Init.Methods;
 using InputControllers.Pc;
 using Map;
@@ -138,7 +137,7 @@ namespace Init
             creator.PlayerConstructor(Vector3.zero , Vector2.zero, PlayerState.Jump);
         }
         #endregion
-        private void Awake()
+        private void Start()
         {
             if(PrefabManager.GetInstance() == null)
                 throw new ApplicationException("can not init prefab manager");

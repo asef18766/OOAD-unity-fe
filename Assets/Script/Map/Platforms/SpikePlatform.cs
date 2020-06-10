@@ -21,21 +21,23 @@ namespace Map.Platforms
         {
             transform.Translate(Vector3.down * (Time.deltaTime * scale * _speed));
         }
-        IEnumerator _addStall(Guid id)
+
+        private IEnumerator _addStall(Guid id)
         {
             _waitingList.Add(id);
             yield return new WaitForSeconds(waitDuration);
             _waitingList.Remove(id);
         }
-        private List<Guid> _waitingList = new List<Guid>();
-        void OnCollisionStay2D(Collision2D collisionInfo)
+        private readonly List<Guid> _waitingList = new List<Guid>();
+
+        private void OnCollisionStay2D(Collision2D collisionInfo)
         {
             if(!collisionInfo.gameObject.CompareTag("Player")) return;
             var target = collisionInfo.gameObject.GetComponent<Player>();
-            var playerUUID = target.uuid;
-            if(_waitingList.Exists( x => playerUUID == x )) return;
+            var playerUuid = target.uuid;
+            if(_waitingList.Exists( x => playerUuid == x )) return;
 
-            StartCoroutine(_addStall(playerUUID));
+            StartCoroutine(_addStall(playerUuid));
             target.StartCoroutine("_hurt",dmg);
         }
     } 
