@@ -86,7 +86,12 @@ public class Player : UuidObject
         }
         _triggered = false;
     }
-
+    public IEnumerator ResetSpeed()
+    {
+        leftAccelerate = 1;
+        rightAccelerate = 1;
+        yield break;
+    }
     public void InitPlayer(IPlayerController playerController, PlayerState state)
     {
         controller = playerController;
@@ -127,9 +132,11 @@ public class Player : UuidObject
         var move = controller.OnMove();
         if (move != Vector2.zero)
         {
-            /*
-            if(move == Vector2.left)
-                move = move * left*/
+            if (move == Vector2.left)
+                move *= leftAccelerate;
+            else if(move == Vector2.right)
+                move *= rightAccelerate;
+            
             transform.Translate(move * moveScale);
         }
     }

@@ -78,13 +78,12 @@ namespace Init
                     Guid.NewGuid(),
                     Guid.NewGuid()
                 };
-                NetworkManager.GetInstance().GetComponent().Emit("setPlayerID" , (self) =>
-                {
-                    self.AddField("ids",new JSONObject(JSONObject.Type.ARRAY));
-                    self["ids"].Add(uuid[0].ToString());
-                    self["ids"].Add(uuid[1].ToString());
-                });
-                
+                var jsonObject = new JSONObject();
+                jsonObject.AddField("ids",new JSONObject(JSONObject.Type.ARRAY));
+                jsonObject["ids"].Add(uuid[0].ToString());
+                jsonObject["ids"].Add(uuid[1].ToString());
+                NetworkManager.GetInstance().GetComponent().Emit("setPlayerID" , jsonObject);
+                                                                
                 UnityMainThread.Worker.AddJob(() =>
                 {
                     const int pScale = 4;

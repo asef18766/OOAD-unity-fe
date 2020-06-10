@@ -19,6 +19,7 @@ namespace Map.Platforms
         [SerializeField] private SpriteRenderer[] criticalSprite;
         [SerializeField] private Sprite rightArrow, swap , brick , add , subtract;
         [SerializeField] private float scale = 1.0f;
+        [SerializeField] private float deltaSpeed = 0.3f;
         private DirectionPlatformMode _type;
         private bool _accelerate;
         private readonly Dictionary<DirectionPlatformMode, float> _spawnRate=new Dictionary<DirectionPlatformMode, float>()
@@ -79,12 +80,30 @@ namespace Map.Platforms
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            throw new NotImplementedException();
+            if(!other.gameObject.CompareTag("Player")) return;
+
+            var player = other.gameObject.GetComponent<Player>();
+            switch (_type)
+            {
+                case DirectionPlatformMode.LeftPlatform:
+                    player.leftAccelerate = (_accelerate) ? 1 + deltaSpeed : 1 - deltaSpeed;
+                    break;
+                case DirectionPlatformMode.RightPlatform:
+                    player.rightAccelerate = (_accelerate) ? 1 + deltaSpeed : 1 - deltaSpeed;
+                    break;
+                case DirectionPlatformMode.SwapPlatform:
+                    player.leftAccelerate = -1;
+                    player.rightAccelerate = -1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void OnCollisionExit(Collision other)
         {
-            throw new NotImplementedException();
+            if(!other.gameObject.CompareTag("Player")) return;
+            other.gameObject.GetComponent<Player>().StartCoroutine(nameof(Player.ResetSpeed));
         }
     }
 }
