@@ -7,7 +7,7 @@ using Map;
 using Map.Platforms;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using UUID;
 

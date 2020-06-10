@@ -1,18 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using Network;
+using Map.Platforms;
+using UnityEngine;
+using Utils;
 
 namespace UUID
 {
     public class UuidManager
     {
         [CanBeNull] private static UUID.UuidManager _instance = null;
-        private readonly Dictionary<System.Guid, UuidObject> _data; 
+        private readonly Dictionary<System.Guid, UuidObject> _data;
         private SocketIOComponent _network;
+        private const float _emitSpeed = 0.5f;
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
@@ -27,7 +32,7 @@ namespace UUID
 
         public void Register(UuidObject obj)
         {
-            _data.Add(obj.uuid ,obj);
+            _data.Add(obj.uuid, obj);
         }
 
         public UuidObject Query(System.Guid uuid)
@@ -36,18 +41,18 @@ namespace UUID
         }
         public void Remove(System.Guid uuid)
         {
-            if(_data.ContainsKey(uuid))
+            if (_data.ContainsKey(uuid))
                 _data.Remove(uuid);
         }
         public void HookNetworking()
         {
-            NetworkManager.GetInstance().GetComponent().On("updateEntity" , _onUpdateEntity);
+            NetworkManager.GetInstance().GetComponent().On("updateEntity", _onUpdateEntity);
         }
         public void UnHookNetworking()
         {
-            NetworkManager.GetInstance().GetComponent().Off("updateEntity" , _onUpdateEntity);
+            NetworkManager.GetInstance().GetComponent().Off("updateEntity", _onUpdateEntity);
         }
-        
+
         /*
          * format:
          * {
@@ -68,18 +73,33 @@ namespace UUID
             var parent = jsonObject["parent"].str;
             throw new NotImplementedException();
         }
-        
+
         private void _onUpdateEntity(SocketIOEvent e)
         {
             var cmd = e.data["type"].str;
             var args = e.data["args"];
-            
+
             throw new NotImplementedException();
         }
 
-        private void _sendMovement()
+        private IEnumerator _sendMovement()
         {
-            _network.Emit("operation");
+            while (true)
+            {
+                yield return new WaitForSeconds(_emitSpeed);
+
+                foreach (UuidObject obj in _data.Values)
+                {
+                    if (!(obj is IPlatform) && !(obj is Player))
+                        continue;
+
+                    var jsonObject = new JSONObject($"{{\"type\":\"Translate\"}}");
+                    jsonObject["args"]["position"] = Jsonify.VectortoJson(obj.transform.position);
+                    jsonObject["args"]["rotation"] = Jsonify.VectortoJson(obj.transform.rotation.eulerAngles);
+                    jsonObject["args"]["uuid"].str = obj.uuid.ToString();
+                    _network.Emit("updateEntity", jsonObject);
+                }
+            }
         }
     }
 }

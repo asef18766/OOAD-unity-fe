@@ -1,7 +1,7 @@
 ﻿using System;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

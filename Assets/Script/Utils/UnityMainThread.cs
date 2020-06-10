@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ThreadUtils
+namespace Utils
 {
     public class UnityMainThread : UnityEngine.MonoBehaviour
     {
