@@ -37,11 +37,11 @@ namespace Init
             MapFactory.GetInstance();
             MapFactory.PlatformScale = 2;
             foreach (var location in locations)
-                creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
+                creator.PlatformConstructor(location, Vector2.one * 2, PlatformTypes.Normal);
             #endregion
             #region player_creation
             const int pScale = 4;
-            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump).name = "p1";
+            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f), Vector2.one * pScale, PlayerState.Jump).name = "p1";
             var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
             p2.GetComponent<PcKeyboardModel>().walk = new[]
             {
@@ -56,9 +56,9 @@ namespace Init
 
             var round = new GameObject("GameRound");
             round.AddComponent<GameRound>();
-            
+
             var ui = PrefabManager.GetInstance().GetGameObject("UIController");
-            Instantiate(ui , canvas);
+            Instantiate(ui, canvas);
         }
 
         #endregion
@@ -72,17 +72,6 @@ namespace Init
             print($"receive raw {e}");
             if (e.data["success"].b)
             {
-                var uuid = new[]
-                {
-                    Guid.NewGuid(),
-                    Guid.NewGuid()
-                };
-                var jsonObject = new JSONObject();
-                jsonObject.AddField("ids",new JSONObject(JSONObject.Type.ARRAY));
-                jsonObject["ids"].Add(uuid[0].ToString());
-                jsonObject["ids"].Add(uuid[1].ToString());
-                NetworkManager.GetInstance().GetComponent().Emit("setPlayerID" , jsonObject);
-                                                                
                 UnityMainThread.Worker.AddJob(() =>
                 {
                     const int pScale = 4;
@@ -90,9 +79,28 @@ namespace Init
                     var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
                     p1.name = "p1";
                     p2.name = "p2";
-                    p1.ModifySelfId(uuid[0]);
-                    p2.ModifySelfId(uuid[1]);
-                    
+
+                    var jsonObject = new JSONObject();
+                    jsonObject.AddField("ids", new JSONObject(JSONObject.Type.ARRAY));
+                    jsonObject["ids"].Add(p1.uuid.ToString());
+                    jsonObject["ids"].Add(p2.uuid.ToString());
+                    NetworkManager.GetInstance().GetComponent().Emit("setPlayerID", jsonObject);
+
+                    #region map_creation
+                    var locations = new[]
+                    {
+                        new Vector2(1.75f , 3.45f),
+                        new Vector2(4.78f , 2.02f),
+                        new Vector2(-2.04f , 1.34f),
+                        new Vector2(0.42f , -0.4f),
+                        new Vector2(-2.07f , -2.43f),
+                        new Vector2(4.49f , -2.43f)
+                    };
+                    MapFactory.GetInstance();
+                    MapFactory.PlatformScale = 2;
+                    foreach (var location in locations)
+                        creator.PlatformConstructor(location, Vector2.one * 2, PlatformTypes.Normal);
+                    #endregion
                 });
             }
             else
@@ -110,21 +118,21 @@ namespace Init
         private void _buildOnlineServer()
         {
             UnityMainThread.Spawn();
-            
-            var manager= NetworkManager.GetInstance();
+
+            var manager = NetworkManager.GetInstance();
             var secret = "14508888";
-            
+
             var network = manager.GetComponent();
             network.url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
-            
+
             var i = 0;
-            network.On("open" , (e) =>
-            {
-                if(i == 0)
-                    network.Emit("serverCreated" , JSONObject.Create($"{{\"token\":\"{secret}\"}}"));
-                i++;
-            });
-            network.On("serverCreated" , _serverCreated);
+            network.On("open", (e) =>
+           {
+               if (i == 0)
+                   network.Emit("serverCreated", JSONObject.Create($"{{\"token\":\"{secret}\"}}"));
+               i++;
+           });
+            network.On("serverCreated", _serverCreated);
             network.Connect();
             _gameKiller = _waitServer();
             StartCoroutine(_gameKiller);
@@ -134,18 +142,18 @@ namespace Init
         private void _buildOnlineClient()
         {
             UuidManager.GetInstance().HookNetworking();
-            creator.PlayerConstructor(Vector3.zero , Vector2.zero, PlayerState.Jump);
+            creator.PlayerConstructor(Vector3.zero, Vector2.zero, PlayerState.Jump);
         }
         #endregion
         private void Start()
         {
-            if(PrefabManager.GetInstance() == null)
+            if (PrefabManager.GetInstance() == null)
                 throw new ApplicationException("can not init prefab manager");
-            
+
             Instance = this;
-            #if BUILD_SERVER
+#if BUILD_SERVER
             GameChoice.Gamemode = GameMode.Server;
-            #endif
+#endif
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:
@@ -161,7 +169,7 @@ namespace Init
                         creator = new PcOfflineConstructor();
                         _buildPcOffline();
                     }
-                    else if(GameChoice.Gamemode == GameMode.Online)
+                    else if (GameChoice.Gamemode == GameMode.Online)
                     {
                         creator = new OnlineClientConstructor();
                         _buildPcOffline();

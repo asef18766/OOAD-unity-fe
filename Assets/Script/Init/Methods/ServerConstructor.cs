@@ -3,32 +3,45 @@ using UnityEngine;
 using System;
 using InputControllers.Network.Server;
 using Object = UnityEngine.Object;
+using Network;
+using SocketIO;
+using Utils;
+using UUID;
+
 
 namespace Init.Methods
 {
     public class ServerConstructor : IObjectConstructor
     {
         private static PrefabManager _prefabManager;
+        private SocketIOComponent _network;
+        public ServerConstructor()
+        {
+            _network = NetworkManager.GetInstance().GetComponent();
+        }
         public Player PlayerConstructor(Vector3 pos, Vector2 scale, PlayerState iniState)
         {
             if (_prefabManager == null)
             {
                 var pIns = PrefabManager.GetInstance();
-                if(pIns == null)
+                if (pIns == null)
                     throw new Exception("get null prefab manager");
                 _prefabManager = pIns;
             }
 
             var playerPrefab = _prefabManager.GetGameObject("Player");
-            if(playerPrefab == null)
+            if (playerPrefab == null)
                 throw new Exception("get null player prefab");
-            
+
             var playerObject = Object.Instantiate(playerPrefab);
             playerObject.transform.position = pos;
             playerObject.transform.localScale = scale;
             var controller = playerObject.AddComponent<OperationEventListener>();
             var player = playerObject.GetComponent<Player>();
-            player.InitPlayer(controller , iniState);
+            player.InitPlayer(controller, iniState);
+            player.ModifySelfId(Guid.NewGuid());
+            _sendInit(playerObject, "Player");
+
             return player;
         }
 
@@ -37,39 +50,52 @@ namespace Init.Methods
             if (_prefabManager == null)
             {
                 var pIns = PrefabManager.GetInstance();
-                if(pIns == null)
+                if (pIns == null)
                     throw new Exception("get null prefab manager");
                 _prefabManager = pIns;
             }
-            GameObject gameObject=null;
+            string platform;
+
             switch (type)
             {
                 case PlatformTypes.Direction:
-                    gameObject = _prefabManager.GetGameObject("DirectionPlatform");
+                    platform = "DirectionPlatform";
                     break;
                 case PlatformTypes.Fragile:
-                    gameObject = _prefabManager.GetGameObject("FragilePlatform");
+                    platform = "FragilePlatform";
                     break;
                 case PlatformTypes.Freeze:
-                    gameObject = _prefabManager.GetGameObject("FreezePlatform");
+                    platform = "FreezePlatform";
                     break;
                 case PlatformTypes.Normal:
-                    gameObject = _prefabManager.GetGameObject("NormalPlatform");
+                    platform = "NormalPlatform";
                     break;
                 case PlatformTypes.Spike:
-                    gameObject = _prefabManager.GetGameObject("SpikePlatform");
+                    platform = "SpikePlatform";
                     break;
                 case PlatformTypes.Time:
-                    gameObject = _prefabManager.GetGameObject("TimePlatform");
+                    platform = "TimePlatform";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
-
+            GameObject gameObject = _prefabManager.GetGameObject(platform);
             var instance = Object.Instantiate(gameObject);
             instance.transform.position = pos;
             instance.transform.localScale = scale;
+            _sendInit(instance, platform);
+            
             return instance.GetComponent<IPlatform>();
+        }
+
+        private void _sendInit(GameObject obj, string name)
+        {
+            var jsonObject = new JSONObject($"{{\"type\":\"Instantiate\"}}");
+            jsonObject["args"] = new JSONObject($"{{\"uuid\":\"{obj.GetComponent<UuidObject>().uuid.ToString()}\",\"parent\":null,\"prefab\":\"{name}\"}}");
+            jsonObject["args"]["transform"] = new JSONObject();
+            jsonObject["args"]["transform"]["position"] = Jsonify.VectortoJson(obj.transform.position);
+            jsonObject["args"]["transform"]["rotation"] = Jsonify.VectortoJson(obj.transform.rotation.eulerAngles);
+            _network.Emit("updateEntity", jsonObject);
         }
     }
 }

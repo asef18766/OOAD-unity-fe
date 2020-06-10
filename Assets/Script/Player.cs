@@ -112,7 +112,7 @@ public class Player : UuidObject
 
     private Rigidbody2D _rb;
     private EventManager _eventManager;
-    private void Start()
+    private void Awake()
     { 
         _rb = GetComponent<Rigidbody2D>();
         _eventManager = EventManager.GetInstance();

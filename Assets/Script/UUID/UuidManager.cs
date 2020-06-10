@@ -21,7 +21,7 @@ namespace UUID
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
-            //CoroutineRunner.Runner.StartCoroutine(_sendMovement());
+            CoroutineRunner.Runner.StartCoroutine(_sendMovement());
             _network = NetworkManager.GetInstance().GetComponent();
         }
 
@@ -94,6 +94,7 @@ namespace UUID
                         continue;
 
                     var jsonObject = new JSONObject($"{{\"type\":\"Translate\"}}");
+                    jsonObject["args"] = new JSONObject("{\"uuid\":\"a\"}");
                     jsonObject["args"]["position"] = Jsonify.VectortoJson(obj.transform.position);
                     jsonObject["args"]["rotation"] = Jsonify.VectortoJson(obj.transform.rotation.eulerAngles);
                     jsonObject["args"]["uuid"].str = obj.uuid.ToString();
