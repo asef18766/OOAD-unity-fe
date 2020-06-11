@@ -22,11 +22,12 @@ namespace Map
         private const float XMaxLocation = 7;
 
         public static float PlatformScale = 2.0f;
-        
+        public bool IsPause = false;
+
         private MapFactory()
         {
             var eventManager = EventManager.GetInstance();
-            eventManager.RegisterEvent("CreatePlatform" , CreatePlatform);
+            eventManager.RegisterEvent("CreatePlatform", CreatePlatform);
             _spawnRate = new Dictionary<PlatformTypes, float>
             {
                 {PlatformTypes.Direction, 0.1f},
@@ -58,15 +59,18 @@ namespace Map
         }
         private IEnumerator GeneratePlatform()
         {
-            while(true)
+            while (true)
             {
                 yield return new WaitForSeconds(SpawnSpeed);
-                var platformType= ChoosePlatformType();
+
+                if(IsPause) continue;
+
+                var platformType = ChoosePlatformType();
                 var xPos = Random.Range(XMinLocation, XMaxLocation);
-                CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
+                CreatePlatform(platformType, new Vector2(xPos, YLocation), PlatformScale);
             }
         }
-        
+
         /*
          * obj form:
          * {
@@ -77,7 +81,7 @@ namespace Map
          *     "scale":87
          * }
          */
-        private static void CreatePlatform(PlatformTypes type , Vector2 pos , float scale)
+        private static void CreatePlatform(PlatformTypes type, Vector2 pos, float scale)
         {
             var plat = GameManager.Instance.creator.PlatformConstructor(pos, new Vector2(scale, scale), type);
             if (plat == null)
@@ -85,16 +89,16 @@ namespace Map
                 Debug.Log("GG");
             }
         }
-        private void CreatePlatform(string name , JSONObject obj)
+        private void CreatePlatform(string name, JSONObject obj)
         {
             var location = obj["location"].list;
-            var loc = new Vector3(location[0].f , location[1].f , location[2].f);
+            var loc = new Vector3(location[0].f, location[1].f, location[2].f);
             var scale = obj["scale"].f;
-            
-            if(!Enum.TryParse(obj["type"].str , out PlatformTypes platformType))
+
+            if (!Enum.TryParse(obj["type"].str, out PlatformTypes platformType))
                 throw new ArgumentException($"invalid platform type {obj["type"].str}");
-            
-            CreatePlatform(platformType , loc , scale);
+
+            CreatePlatform(platformType, loc, scale);
         }
     }
 }

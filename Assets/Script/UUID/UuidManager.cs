@@ -6,6 +6,7 @@ using Network;
 using SocketIO;
 using Utils;
 using Network;
+using Map;
 using Map.Platforms;
 using UnityEngine;
 using Utils;
@@ -100,6 +101,16 @@ namespace UUID
                     jsonObject["args"]["uuid"].str = obj.uuid.ToString();
                     _network.Emit("updateEntity", jsonObject);
                 }
+            }
+        }
+
+        public void PauseGame(bool pause)
+        {
+            MapFactory.GetInstance().IsPause = pause;
+
+            foreach (UuidObject obj in _data.Values)
+            {
+                obj.SetActive(!pause);
             }
         }
     }

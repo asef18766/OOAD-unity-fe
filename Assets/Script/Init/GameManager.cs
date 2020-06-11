@@ -101,6 +101,13 @@ namespace Init
                     foreach (var location in locations)
                         creator.PlatformConstructor(location, Vector2.one * 2, PlatformTypes.Normal);
                     #endregion
+
+                    UuidManager.GetInstance().PauseGame(true);
+                    NetworkManager.GetInstance().GetComponent().On("ready", (e) =>
+                    {
+                        UuidManager.GetInstance().PauseGame(false);
+                    });
+                    NetworkManager.GetInstance().GetComponent().Emit("initOver");
                 });
             }
             else
