@@ -1,25 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using Network;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Map.Platforms;
 
 namespace UUID
 {
     public class UuidManager
     {
         [CanBeNull] private static UUID.UuidManager _instance = null;
-        private readonly Dictionary<System.Guid, UuidObject> _data; 
+        private readonly Dictionary<System.Guid, UuidObject> _data;
         private SocketIOComponent _network;
+        private const float _emitSpeed = 0.5f;
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
-            //CoroutineRunner.Runner.StartCoroutine(_sendMovement());
+            CoroutineRunner.Runner.StartCoroutine(_sendMovement());
             _network = NetworkManager.GetInstance().GetComponent();
         }
 
@@ -30,7 +32,7 @@ namespace UUID
 
         public void Register(UuidObject obj)
         {
-            _data.Add(obj.uuid ,obj);
+            _data.Add(obj.uuid, obj);
         }
 
         public UuidObject Query(System.Guid uuid)
@@ -39,18 +41,18 @@ namespace UUID
         }
         public void Remove(System.Guid uuid)
         {
-            if(_data.ContainsKey(uuid))
+            if (_data.ContainsKey(uuid))
                 _data.Remove(uuid);
         }
         public void HookNetworking()
         {
-            NetworkManager.GetInstance().GetComponent().On("updateEntity" , _onUpdateEntity);
+            NetworkManager.GetInstance().GetComponent().On("updateEntity", _onUpdateEntity);
         }
         public void UnHookNetworking()
         {
-            NetworkManager.GetInstance().GetComponent().Off("updateEntity" , _onUpdateEntity);
+            NetworkManager.GetInstance().GetComponent().Off("updateEntity", _onUpdateEntity);
         }
-        
+
         /*
          * format:
          * {
@@ -78,20 +80,36 @@ namespace UUID
             });
             throw new NotImplementedException();
         }
-        
+
         private void _onUpdateEntity(SocketIOEvent e)
         {
             Debug.Log($"receive packet :{e.data}");
             
             var cmd = e.data["type"].str;
             var args = e.data["args"];
-            
+
             throw new NotImplementedException();
         }
 
-        private void _sendMovement()
+        private IEnumerator _sendMovement()
         {
-            _network.Emit("operation");
+            while (true)
+            {
+                yield return new WaitForSeconds(_emitSpeed);
+
+                foreach (UuidObject obj in _data.Values)
+                {
+                    if (!(obj is IPlatform) && !(obj is Player))
+                        continue;
+
+                    var jsonObject = new JSONObject($"{{\"type\":\"Translate\"}}");
+                    jsonObject["args"] = new JSONObject("{\"uuid\":\"a\"}");
+                    jsonObject["args"]["position"] = Jsonify.VectortoJson(obj.transform.position);
+                    jsonObject["args"]["rotation"] = Jsonify.VectortoJson(obj.transform.rotation.eulerAngles);
+                    jsonObject["args"]["uuid"].str = obj.uuid.ToString();
+                    _network.Emit("updateEntity", jsonObject);
+                }
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Event;
 using UnityEngine;
 
-namespace ThreadUtils
+namespace Utils
 {
     public class CoroutineRunner : MonoBehaviour
     {
