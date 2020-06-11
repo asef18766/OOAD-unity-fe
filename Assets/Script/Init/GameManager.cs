@@ -103,7 +103,7 @@ namespace Init
                     #endregion
 
                     UuidManager.GetInstance().PauseGame(true);
-                    NetworkManager.GetInstance().GetComponent().On("ready", (e) =>
+                    NetworkManager.GetInstance().GetComponent().On("ready", (data) =>
                     {
                         UuidManager.GetInstance().PauseGame(false);
                     });

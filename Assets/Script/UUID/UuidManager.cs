@@ -19,6 +19,8 @@ namespace UUID
         private readonly Dictionary<System.Guid, UuidObject> _data;
         private SocketIOComponent _network;
         private const float _emitSpeed = 0.5f;
+        private static readonly JSONObject UpdateEntityFormat = new JSONObject($"{{\"type\":\"Translate\"}}");
+        private static readonly JSONObject ArgsFormat = new JSONObject("{\"uuid\":\"a\"}");
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
@@ -91,9 +93,8 @@ namespace UUID
 
                 foreach (var obj in _data.Values)
                 {
-                    
-                    var jsonObject = new JSONObject($"{{\"type\":\"Translate\"}}");
-                    jsonObject["args"] = new JSONObject("{\"uuid\":\"a\"}");
+                    var jsonObject = UpdateEntityFormat.Copy();
+                    jsonObject["args"] = ArgsFormat.Copy();
                     jsonObject["args"]["position"] = Jsonify.VectortoJson(obj.transform.position);
                     jsonObject["args"]["rotation"] = Jsonify.VectortoJson(obj.transform.rotation.eulerAngles);
                     jsonObject["args"]["uuid"].str = obj.uuid.ToString();
@@ -106,9 +107,9 @@ namespace UUID
         {
             MapFactory.GetInstance().IsPause = pause;
 
-            foreach (UuidObject obj in _data.Values)
+            foreach (var obj in _data.Values)
             {
-                obj.SetActive(!pause);
+                obj.gameObject.SetActive(!pause);
             }
         }
     }
