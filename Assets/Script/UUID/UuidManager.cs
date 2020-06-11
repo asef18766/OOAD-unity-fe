@@ -89,11 +89,9 @@ namespace UUID
             {
                 yield return new WaitForSeconds(_emitSpeed);
 
-                foreach (UuidObject obj in _data.Values)
+                foreach (var obj in _data.Values)
                 {
-                    if (!(obj is IPlatform) && !(obj is Player))
-                        continue;
-
+                    
                     var jsonObject = new JSONObject($"{{\"type\":\"Translate\"}}");
                     jsonObject["args"] = new JSONObject("{\"uuid\":\"a\"}");
                     jsonObject["args"]["position"] = Jsonify.VectortoJson(obj.transform.position);
