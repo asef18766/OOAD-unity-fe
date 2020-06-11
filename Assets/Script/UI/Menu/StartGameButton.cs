@@ -1,4 +1,5 @@
 ﻿using System;
+using Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,10 +18,15 @@ namespace UI.Menu
 
         private void OnClick()
         {
-            switch (GameChoice.Gamemode)
+            switch (GameChoice.GameMode)
             {
                 case GameMode.Offline:
-                    throw new NotImplementedException("not implemented yet...QQ");
+                    if (NetworkManager.HasInstance())
+                    {
+                        Destroy(NetworkManager.GetInstance().GetComponent().gameObject);
+                    }
+                    SceneManager.LoadScene(offlineScene);
+                    break;
                 case GameMode.Online:
                     SceneManager.LoadScene(onlineScene);
                     break;
@@ -28,7 +34,7 @@ namespace UI.Menu
                     print("you dirty hacker :P");
                     break;
                 default:
-                    throw new ArgumentException($"receive unexpected option {GameChoice.Gamemode}");
+                    throw new ArgumentException($"receive unexpected option {GameChoice.GameMode}");
             }
         }
     }

@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 1314723901072168263}
   - component: {fileID: 1314723901072168264}
   - component: {fileID: 6678318030076526987}
+  - component: {fileID: -2431367830656240927}
   m_Layer: 0
   m_Name: DirectionPlatform
   m_TagString: Platform
@@ -239,7 +240,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8ccf490b504940942c7fb38d4ea11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  criticalSprite:
+  - {fileID: 1314723901515058370}
+  - {fileID: 1314723900624643426}
+  - {fileID: 1314723901126869392}
+  rightArrow: {fileID: 8198906874348045390, guid: d02f2e5e4b797ae4aba330d2fb187839,
+    type: 3}
+  swap: {fileID: -4871547514942784699, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  brick: {fileID: 6741368569237755234, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  add: {fileID: 1328938282632780196, guid: d02f2e5e4b797ae4aba330d2fb187839, type: 3}
+  subtract: {fileID: -7571962286574281417, guid: d02f2e5e4b797ae4aba330d2fb187839,
+    type: 3}
   scale: 1
+--- !u!50 &-2431367830656240927
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314723901072168265}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1 &1314723901126869394
 GameObject:
   m_ObjectHideFlags: 0

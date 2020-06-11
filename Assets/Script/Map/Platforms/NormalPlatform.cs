@@ -4,7 +4,7 @@ namespace Map.Platforms
 {
     public class NormalPlatform : UuidObject , IPlatform
     {
-        private float _speed = 1;
+        private float _speed = MapFactory.GlobalSpeed;
 
         [SerializeField] private float scale = 1.0f;
         public void SetSpeed(float speed)

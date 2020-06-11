@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ThreadUtils
 {
@@ -13,6 +14,7 @@ namespace ThreadUtils
             DontDestroyOnLoad(this);
         }
 
+        public static void Spawn() => DontDestroyOnLoad(new GameObject("mainThread").AddComponent<UnityMainThread>().gameObject);
         private void Update() {
             while (_jobs.Count > 0) 
                 _jobs.Dequeue().Invoke();

@@ -12,9 +12,9 @@ namespace Map
 {
     public class MapFactory
     {
-        private static MapFactory _instance = null;
-        private readonly Dictionary<PlatformTypes, float> _spawnRate = null;
-        private List<IPlatform> _platforms = new List<IPlatform>();
+        public static readonly float GlobalSpeed = 1;
+        private static MapFactory _instance;
+        private readonly Dictionary<PlatformTypes, float> _spawnRate;
         private const float SpawnSpeed = 1.5f;
 
         private const float YLocation = 5;
@@ -63,7 +63,6 @@ namespace Map
                 yield return new WaitForSeconds(SpawnSpeed);
                 var platformType= ChoosePlatformType();
                 var xPos = Random.Range(XMinLocation, XMaxLocation);
-                Debug.Log($"xPos:{xPos}");
                 CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
             }
         }

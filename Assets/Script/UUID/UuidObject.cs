@@ -6,14 +6,17 @@ namespace UUID
     public class UuidObject : MonoBehaviour
     {
         public System.Guid uuid;
-        public UuidObject()
+
+        private void Awake()
         {
             uuid = System.Guid.NewGuid();
             UuidManager.GetInstance().Register(this);
         }
-        public UuidObject(string remoteId)
+        public void ModifySelfId(System.Guid id)
         {
-            uuid = System.Guid.Parse(remoteId);
+            UuidManager.GetInstance().Remove(uuid);
+            uuid = id;
+            UuidManager.GetInstance().Register(this);
         }
     }
 }
