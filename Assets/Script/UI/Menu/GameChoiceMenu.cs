@@ -53,7 +53,9 @@ namespace UI.Menu
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
-                    ioComponent.url = $"ws://{defaultIp}/socket.io/?EIO=4&transport=websocket";
+                    var serverAdder = $"ws://{defaultIp}/socket.io/?EIO=3&transport=websocket";
+                    print($"try to connect:{serverAdder}");
+                    ioComponent.url = serverAdder;
                     _setUpNetworking();
                     waitWindow.SetActive(true);
                     break;
@@ -68,7 +70,7 @@ namespace UI.Menu
                     manager.Clean();
                     ioComponent = manager.GetComponent();
                     
-                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=4&transport=websocket";
+                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=3&transport=websocket";
                     
                     if (_serverNameDictionary.ContainsKey(dest))
                     {

@@ -6,10 +6,12 @@ namespace Utils
 {
     public class UnityMainThread : UnityEngine.MonoBehaviour
     {
-        internal  static UnityMainThread Worker;
+        internal static UnityMainThread Worker;
         private Queue<Action> _jobs = new Queue<Action>();
 
         private void Awake() {
+            if(Worker != null) return;
+            
             Worker = this;
             DontDestroyOnLoad(this);
         }

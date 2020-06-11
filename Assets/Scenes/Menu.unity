@@ -730,7 +730,7 @@ MonoBehaviour:
   addServerMenu: {fileID: 2044747931}
   errorWindow: {fileID: 300250539}
   waitWindow: {fileID: 952737558}
-  defaultIp: 127.0.0.1
+  defaultIp: 0.tcp.ngrok.io:17573
 --- !u!1 &300250539
 GameObject:
   m_ObjectHideFlags: 0
@@ -3919,7 +3919,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v1.0.0
+  m_Text: v1.0.2
 --- !u!222 &1374545459
 CanvasRenderer:
   m_ObjectHideFlags: 0

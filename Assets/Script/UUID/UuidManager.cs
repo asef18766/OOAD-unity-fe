@@ -69,26 +69,36 @@ namespace UUID
         private void _instantiateObject(JSONObject jsonObject)
         {
             var guid = Guid.Parse(jsonObject["uuid"].str);
-            var transform = jsonObject["transform"]["position"];
-            var rotation = jsonObject["transform"]["rotation"];
+            var position = Jsonify.JsontoVector(jsonObject["transform"]["position"]);
+            var rotation = Jsonify.JsontoVector(jsonObject["transform"]["rotation"]);
             var prefab = jsonObject["prefab"].str;
             
             UnityMainThread.Worker.AddJob(() =>
             {
                 var pref = PrefabManager.GetInstance().GetGameObject(prefab);
-                Object.Instantiate(pref);
+                Object.Instantiate(pref , position , Quaternion.Euler(rotation));
             });
             throw new NotImplementedException();
         }
 
         private void _onUpdateEntity(SocketIOEvent e)
         {
-            Debug.Log($"receive packet :{e.data}");
+            Debug.Log($"receive packet updateEntity:{e.data}");
             
             var cmd = e.data["type"].str;
             var args = e.data["args"];
-
-            throw new NotImplementedException();
+            switch (cmd)
+            {
+                case "Instantiate":
+                    _instantiateObject(args);
+                    break;
+                case "Translate":
+                    throw new NotImplementedException();
+                    break;
+                case "Invoke":
+                    throw new NotImplementedException();
+                    break;
+            }
         }
 
         private IEnumerator _sendMovement()

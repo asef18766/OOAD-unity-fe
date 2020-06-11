@@ -3,6 +3,7 @@ using System.Collections;
 using Event;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 public class GameRound : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class GameRound : MonoBehaviour
     {
         if(_isGameEnded) return;
         EventManager.GetInstance().Clean();
+        CoroutineRunner.Runner.StopAllCoroutines();
         print("game ended");
         _eventManager.InvokeEvent("endGame" , JSONObject.nullJO);
         StopAllCoroutines();
