@@ -34,7 +34,7 @@ public class Player : UuidObject
             GameRound.Instance.EndGame();
         }
 
-        JSONObject jSonObject = HurtMsgFormat.Copy();
+        var jSonObject = HurtMsgFormat.Copy();
         jSonObject["playerName"].str =  this.gameObject.name;
         jSonObject["health"].n = health;
         jSonObject["dmg"].n = dmg;
