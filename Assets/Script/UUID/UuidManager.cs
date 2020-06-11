@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using Network;
 using SocketIO;
 using ThreadUtils;
 using Network;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace UUID
 {
@@ -56,8 +59,7 @@ namespace UUID
          *     "transform":
          *     {
          *         "position":[0,0,0] ,
-         *         "rotation":[0,0,0] ,
-         *         "scale":[0,0,0]
+         *         "rotation":[0,0,0]
          *     },
          *     "prefab":String
          * }
@@ -65,12 +67,22 @@ namespace UUID
         private void _instantiateObject(JSONObject jsonObject)
         {
             var guid = Guid.Parse(jsonObject["uuid"].str);
-            var parent = jsonObject["parent"].str;
+            var transform = jsonObject["transform"]["position"];
+            var rotation = jsonObject["transform"]["rotation"];
+            var prefab = jsonObject["prefab"].str;
+            
+            UnityMainThread.Worker.AddJob(() =>
+            {
+                var pref = PrefabManager.GetInstance().GetGameObject(prefab);
+                Object.Instantiate(pref);
+            });
             throw new NotImplementedException();
         }
         
         private void _onUpdateEntity(SocketIOEvent e)
         {
+            Debug.Log($"receive packet :{e.data}");
+            
             var cmd = e.data["type"].str;
             var args = e.data["args"];
             
