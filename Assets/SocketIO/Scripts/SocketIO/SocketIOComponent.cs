@@ -48,7 +48,8 @@ namespace SocketIO
 				default:
 					_manager.Socket.On(ev , (socket, packet, args) =>
 					{
-						callback(new SocketIOEvent(ev , new JSONObject(packet.RemoveEventName(true))));
+						var obj = (packet == null) ? JSONObject.nullJO : new JSONObject(packet.RemoveEventName(true));
+						callback(new SocketIOEvent(ev , obj));
 					});
 					break;
 			}
