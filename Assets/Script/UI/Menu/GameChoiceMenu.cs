@@ -53,7 +53,7 @@ namespace UI.Menu
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
-                    var serverAdder = $"ws://{defaultIp}/socket.io/?EIO=3&transport=websocket";
+                    var serverAdder = $"ws://{defaultIp}/?EIO=3&transport=websocket";
                     print($"try to connect:{serverAdder}");
                     ioComponent.url = serverAdder;
                     _setUpNetworking();
@@ -112,7 +112,7 @@ namespace UI.Menu
         private void TestError(SocketIOEvent e)
         {
             print("receive error");
-            
+            print($"error data {e.data}");
             UnityMainThread.Worker.AddJob(() =>
             {
                 waitWindow.SetActive(false);
