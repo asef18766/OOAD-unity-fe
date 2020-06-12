@@ -1,4 +1,4 @@
-﻿//#define BUILD_SERVER
+﻿#define BUILD_SERVER
 using System;
 using System.Collections;
 using Event;
@@ -174,7 +174,7 @@ namespace Init
 
             Instance = this;
 #if BUILD_SERVER
-            GameChoice.Gamemode = GameMode.Server;
+            GameChoice.GameMode = GameMode.Server;
 #endif
             switch (Application.platform)
             {
