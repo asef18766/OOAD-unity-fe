@@ -47,5 +47,9 @@ namespace Event
         {
             return _instance ?? (_instance = new EventManager());
         }
+        public void Clean()
+        {
+            _events.Clear();
+        }
     }
 }

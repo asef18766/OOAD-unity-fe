@@ -1,12 +1,14 @@
-﻿#define BUILD_SERVER
+﻿//#define BUILD_SERVER
 using System;
 using System.Collections;
+using Event;
 using Init.Methods;
 using InputControllers.Pc;
 using Map;
 using Map.Platforms;
 using Network;
 using SocketIO;
+using UI.SpriteObject;
 using Utils;
 using UnityEngine;
 using UUID;
@@ -22,6 +24,13 @@ namespace Init
 
         #region offline_PC_implementation
 
+        private void _setPlayerSprite(GameObject sprite , Player player)
+        {
+            var playerAnimationController = Instantiate(sprite, player.transform).GetComponent<PlayerAnimationController>();
+            player.moveCallBack.Add(playerAnimationController.PlayerMove);
+            player.freezeCallBack.Add(new Tuple<Action<Player>, Action<Player>>(playerAnimationController.PlayerFreeze , playerAnimationController.PlayerUnFreeze));
+        }
+        
         private void _buildPcOffline()
         {
             #region map_creation
@@ -41,7 +50,8 @@ namespace Init
             #endregion
             #region player_creation
             const int pScale = 4;
-            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f), Vector2.one * pScale, PlayerState.Jump).name = "p1";
+            var p1 = creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump);
+            p1.name = "p1";
             var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
             p2.GetComponent<PcKeyboardModel>().walk = new[]
             {
@@ -52,6 +62,11 @@ namespace Init
             };
             p2.GetComponent<PcKeyboardModel>().clicked = KeyCode.KeypadEnter;
             p2.name = "p2";
+            var prefabManager = PrefabManager.GetInstance();
+            if(prefabManager == null)
+                print("null prefab manager");
+            _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
+            _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
             #endregion
 
             var round = new GameObject("GameRound");
@@ -130,7 +145,7 @@ namespace Init
             var secret = "14508888";
 
             var network = manager.GetComponent();
-            network.url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
+            network.Url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
 
             var i = 0;
             network.On("open", (e) =>
@@ -171,17 +186,18 @@ namespace Init
                 case RuntimePlatform.OSXPlayer:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
-                    if (GameChoice.Gamemode == GameMode.Offline)
+                    if (GameChoice.GameMode == GameMode.Offline)
                     {
+                        print("i am pc offline");
                         creator = new PcOfflineConstructor();
                         _buildPcOffline();
                     }
-                    else if (GameChoice.Gamemode == GameMode.Online)
+                    else if(GameChoice.GameMode == GameMode.Online)
                     {
                         creator = new OnlineClientConstructor();
                         _buildPcOffline();
                     }
-                    else if (GameChoice.Gamemode == GameMode.Server)
+                    else if (GameChoice.GameMode == GameMode.Server)
                     {
                         creator = new ServerConstructor();
                         _buildOnlineServer();

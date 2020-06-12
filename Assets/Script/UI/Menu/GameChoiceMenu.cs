@@ -46,14 +46,15 @@ namespace UI.Menu
             switch (_dropdown.options[index].text)
             {
                 case "Offline":
-                    GameChoice.Gamemode = GameMode.Offline;
+                    GameChoice.GameMode = GameMode.Offline;
                     break;
                 case "Default Server":
-                    GameChoice.Gamemode = GameMode.Online;
+                    GameChoice.GameMode = GameMode.Online;
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
-                    ioComponent.url = $"ws://{defaultIp}/socket.io/?EIO=4&transport=websocket";
+                    var serverAdder = $"ws://{defaultIp}/socket.io/?EIO=3&transport=websocket";
+                    ioComponent.Url = serverAdder;
                     _setUpNetworking();
                     waitWindow.SetActive(true);
                     break;
@@ -62,17 +63,17 @@ namespace UI.Menu
                     _dropdown.value = 0;
                     break;
                 default:
-                    GameChoice.Gamemode = GameMode.Online;
+                    GameChoice.GameMode = GameMode.Online;
                     var dest = _dropdown.options[index].text;
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
                     
-                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=4&transport=websocket";
+                    ioComponent.Url = $"ws://{dest}/socket.io/?EIO=3&transport=websocket";
                     
                     if (_serverNameDictionary.ContainsKey(dest))
                     {
-                        ioComponent.url = _serverNameDictionary[dest];
+                        ioComponent.Url = _serverNameDictionary[dest];
                     }
                     _setUpNetworking();
                     waitWindow.SetActive(true);
@@ -91,7 +92,7 @@ namespace UI.Menu
                 waitWindow.SetActive(false);
                 if (!_serverNameDictionary.ContainsKey(text))
                 {
-                    _serverNameDictionary.Add(text , NetworkManager.GetInstance().GetComponent().url);
+                    _serverNameDictionary.Add(text , NetworkManager.GetInstance().GetComponent().Url);
                 }
                 if(_choice == -1) return;
                     _dropdown.options[_choice].text = text;
@@ -110,7 +111,7 @@ namespace UI.Menu
         private void TestError(SocketIOEvent e)
         {
             print("receive error");
-            
+            print($"error data {e.data}");
             UnityMainThread.Worker.AddJob(() =>
             {
                 waitWindow.SetActive(false);
