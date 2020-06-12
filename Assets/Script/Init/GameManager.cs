@@ -138,7 +138,7 @@ namespace Init
             var secret = "14508888";
 
             var network = manager.GetComponent();
-            network.url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
+            network.Url = "ws://127.0.0.1/socket.io/?EIO=4&transport=websocket";
 
             var i = 0;
             network.On("open", (e) =>

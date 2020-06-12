@@ -53,9 +53,8 @@ namespace UI.Menu
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
-                    var serverAdder = $"ws://{defaultIp}/?EIO=3&transport=websocket";
-                    print($"try to connect:{serverAdder}");
-                    ioComponent.url = serverAdder;
+                    var serverAdder = $"ws://{defaultIp}/socket.io/?EIO=3&transport=websocket";
+                    ioComponent.Url = serverAdder;
                     _setUpNetworking();
                     waitWindow.SetActive(true);
                     break;
@@ -70,11 +69,11 @@ namespace UI.Menu
                     manager.Clean();
                     ioComponent = manager.GetComponent();
                     
-                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=3&transport=websocket";
+                    ioComponent.Url = $"ws://{dest}/socket.io/?EIO=3&transport=websocket";
                     
                     if (_serverNameDictionary.ContainsKey(dest))
                     {
-                        ioComponent.url = _serverNameDictionary[dest];
+                        ioComponent.Url = _serverNameDictionary[dest];
                     }
                     _setUpNetworking();
                     waitWindow.SetActive(true);
@@ -93,7 +92,7 @@ namespace UI.Menu
                 waitWindow.SetActive(false);
                 if (!_serverNameDictionary.ContainsKey(text))
                 {
-                    _serverNameDictionary.Add(text , NetworkManager.GetInstance().GetComponent().url);
+                    _serverNameDictionary.Add(text , NetworkManager.GetInstance().GetComponent().Url);
                 }
                 if(_choice == -1) return;
                     _dropdown.options[_choice].text = text;
