@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

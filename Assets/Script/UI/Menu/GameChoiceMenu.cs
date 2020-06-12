@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,7 +53,9 @@ namespace UI.Menu
                     manager = NetworkManager.GetInstance();
                     manager.Clean();
                     ioComponent = manager.GetComponent();
-                    ioComponent.url = $"ws://{defaultIp}/socket.io/?EIO=4&transport=websocket";
+                    var serverAdder = $"ws://{defaultIp}/?EIO=3&transport=websocket";
+                    print($"try to connect:{serverAdder}");
+                    ioComponent.url = serverAdder;
                     _setUpNetworking();
                     waitWindow.SetActive(true);
                     break;
@@ -68,7 +70,7 @@ namespace UI.Menu
                     manager.Clean();
                     ioComponent = manager.GetComponent();
                     
-                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=4&transport=websocket";
+                    ioComponent.url = $"ws://{dest}/socket.io/?EIO=3&transport=websocket";
                     
                     if (_serverNameDictionary.ContainsKey(dest))
                     {
@@ -110,7 +112,7 @@ namespace UI.Menu
         private void TestError(SocketIOEvent e)
         {
             print("receive error");
-            
+            print($"error data {e.data}");
             UnityMainThread.Worker.AddJob(() =>
             {
                 waitWindow.SetActive(false);

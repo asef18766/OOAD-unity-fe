@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Event;
 using Init;
 using Map.Platforms;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
