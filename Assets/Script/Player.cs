@@ -16,10 +16,10 @@ public class Player : UuidObject
 {
     public List<Action<Vector2>> moveCallBack = new List<Action<Vector2>>();
     public List<Action<string>> clickCallBack = new List<Action<string>>();
-    public List<Tuple<Action<Player> , Action<Player>>> freezeCallBack = new List<Tuple<Action<Player> , Action<Player>>>();
-    
+    public List<Tuple<Action<Player>, Action<Player>>> freezeCallBack = new List<Tuple<Action<Player>, Action<Player>>>();
+
     public float leftAccelerate = 1.0f, rightAccelerate = 1.0f;
-    [SerializeField] private IPlayerController controller;
+    [SerializeField] private IPlayerController controller = null;
     [SerializeField] private float moveScale = 0.3f;
     [SerializeField] private float jumpScale = 3.0f;
     [SerializeField] private float attackRange = 1.0f;
@@ -45,10 +45,10 @@ public class Player : UuidObject
         }
 
         JSONObject jSonObject = HurtMsgFormat.Copy();
-        jSonObject["playerName"].str =  this.gameObject.name;
+        jSonObject["playerName"].str = this.gameObject.name;
         jSonObject["health"].n = health;
         jSonObject["dmg"].n = dmg;
-        _eventManager.InvokeEvent("playerHurt" , jSonObject);
+        _eventManager.InvokeEvent("playerHurt", jSonObject);
         yield return null;
     }
     #endregion
@@ -57,14 +57,14 @@ public class Player : UuidObject
     {
         var buffer = new RaycastHit2D[10];
         var position = transform.position;
-        var items = Physics2D.RaycastNonAlloc(position,AttackDirection,buffer,attackRange);
-        
+        var items = Physics2D.RaycastNonAlloc(position, AttackDirection, buffer, attackRange);
+
         for (var i = 0; i < items; i++)
         {
             if (!buffer[i].collider.gameObject.CompareTag("Player")) continue;
             var entity = buffer[i].collider.gameObject.GetComponent<Player>();
-            if(entity.gameObject == gameObject) continue;
-            entity.StartCoroutine(nameof(_hurt) , strength);
+            if (entity.gameObject == gameObject) continue;
+            entity.StartCoroutine(nameof(_hurt), strength);
         }
         yield return new WaitForSeconds(attackCd);
         _triggered = false;
@@ -92,7 +92,7 @@ public class Player : UuidObject
     #region jump_event_implementation
     private IEnumerator _jump()
     {
-        if(!_touchedGround)
+        if (!_touchedGround)
             yield break;
         _touchedGround = false;
         _rb.AddForce(Vector2.up * jumpScale);
@@ -103,7 +103,7 @@ public class Player : UuidObject
         _triggered = false;
     }
     #endregion
-    
+
     public IEnumerator ResetSpeed()
     {
         print("reset speed");
@@ -128,14 +128,14 @@ public class Player : UuidObject
         }
     }
     private void Awake()
-    { 
+    {
         _rb = GetComponent<Rigidbody2D>();
         _eventManager = EventManager.GetInstance();
-        _eventManager.RegisterEvent("swap"  , (s, o) =>
-        {
-            _rb.gravityScale *= -1;
-            _click = (_click == nameof(_jump)) ? nameof(_attack) : nameof(_jump);
-        });
+        _eventManager.RegisterEvent("swap", (s, o) =>
+      {
+          _rb.gravityScale *= -1;
+          _click = (_click == nameof(_jump)) ? nameof(_attack) : nameof(_jump);
+      });
     }
 
     private void _endGame()
@@ -147,6 +147,8 @@ public class Player : UuidObject
 
     private void Update()
     {
+        if (controller == null) return;
+
         if (controller.OnClicked() && !_triggered)
         {
             foreach (var act in clickCallBack) act(_click);
@@ -158,12 +160,12 @@ public class Player : UuidObject
         {
             if (move == Vector2.left)
                 move *= leftAccelerate;
-            else if(move == Vector2.right)
+            else if (move == Vector2.right)
                 move *= rightAccelerate;
-            
+
             transform.Translate(move * moveScale);
         }
-        
+
         foreach (var act in moveCallBack) act(move);
     }
     private void OnCollisionEnter2D(Collision2D other)

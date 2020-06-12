@@ -188,7 +188,7 @@ namespace Init
                     else if(GameChoice.GameMode == GameMode.Online)
                     {
                         creator = new OnlineClientConstructor();
-                        _buildPcOffline();
+                        _buildOnlineClient();
                     }
                     else if (GameChoice.GameMode == GameMode.Server)
                     {

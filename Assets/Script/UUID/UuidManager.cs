@@ -18,11 +18,14 @@ namespace UUID
         private readonly Dictionary<System.Guid, UuidObject> _data;
         private SocketIOComponent _network;
         private const float _emitSpeed = 0.5f;
+        private int _initTask = 0;
+        private bool _initOver = false;
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
             CoroutineRunner.Runner.StartCoroutine(_sendMovement());
             _network = NetworkManager.GetInstance().GetComponent();
+            _network.On("initOver", _recieveInitOver);
         }
 
         public static UuidManager GetInstance()
@@ -72,19 +75,35 @@ namespace UUID
             var position = Jsonify.JsontoVector(jsonObject["transform"]["position"]);
             var rotation = Jsonify.JsontoVector(jsonObject["transform"]["rotation"]);
             var prefab = jsonObject["prefab"].str;
-            
+            _initTask++;
+
             UnityMainThread.Worker.AddJob(() =>
             {
                 var pref = PrefabManager.GetInstance().GetGameObject(prefab);
-                Object.Instantiate(pref , position , Quaternion.Euler(rotation));
+
+                var obj = Object.Instantiate(pref, position, Quaternion.Euler(rotation));
+                obj.GetComponent<UuidObject>().ModifySelfId(guid);
+
+                _initTask--;
+                if (_initTask == 0 && _initOver)
+                {
+                    _network.Emit("ready");
+                    _initOver = false;
+                }
             });
-            throw new NotImplementedException();
+        }
+
+        private void _translateObject(JSONObject jsonObject)
+        {
+            var obj = Query(Guid.Parse(jsonObject["uuid"].str));
+            obj.transform.position = Jsonify.JsontoVector(jsonObject["position"]);
+            obj.transform.rotation = Quaternion.Euler(Jsonify.JsontoVector(jsonObject["rotation"]));
         }
 
         private void _onUpdateEntity(SocketIOEvent e)
         {
             Debug.Log($"receive packet updateEntity:{e.data}");
-            
+
             var cmd = e.data["type"].str;
             var args = e.data["args"];
             switch (cmd)
@@ -93,12 +112,19 @@ namespace UUID
                     _instantiateObject(args);
                     break;
                 case "Translate":
-                    throw new NotImplementedException();
+                    _translateObject(args);
                     break;
                 case "Invoke":
                     throw new NotImplementedException();
                     break;
             }
+        }
+
+        private void _recieveInitOver(SocketIOEvent e)
+        {
+            _initOver = true;
+            if (_initTask == 0)
+                _network.Emit("ready");
         }
 
         private IEnumerator _sendMovement()

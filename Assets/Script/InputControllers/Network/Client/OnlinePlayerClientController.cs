@@ -33,7 +33,6 @@ namespace InputControllers.Network.Client
                     throw new ArgumentException("Unknown Argument");
             }
             _network = NetworkManager.GetInstance().GetComponent();
-            _network.On("operation", _getOperation);
         }
 
         void Update()
@@ -55,12 +54,6 @@ namespace InputControllers.Network.Client
         public Vector2 OnMove()
         {
             return _move;
-        }
-
-        private void _getOperation(SocketIOEvent e)
-        {
-            _pressed = e.data["function"].b;
-            _move = _dir[(int)e.data["move"].n + 1];
         }
     }
 }
