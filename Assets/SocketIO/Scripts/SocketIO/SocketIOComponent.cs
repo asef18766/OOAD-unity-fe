@@ -31,14 +31,19 @@ namespace SocketIO
 				case "open":
 					_manager.Socket.On(SocketIOEventTypes.Connect , (socket, packet, args) =>
 					{
-						callback(new SocketIOEvent("open" , new JSONObject(packet.RemoveEventName(true))));
+						try
+						{
+							callback(new SocketIOEvent("open" , new JSONObject(packet.RemoveEventName(true))));
+						}
+						catch (Exception e)
+						{
+							print($"socket open error:{e}");
+							throw;
+						}
 					});
 					break;
 				case "error":
-					_manager.Socket.On(SocketIOEventTypes.Error , (socket, packet, args) =>
-					{
-						callback(new SocketIOEvent("error" , new JSONObject(packet.RemoveEventName(true))));
-					});
+					_manager.Socket.On(SocketIOEventTypes.Error , (socket, packet, args) => callback(new SocketIOEvent("error" , JSONObject.nullJO)));
 					break;
 				default:
 					_manager.Socket.On(ev , (socket, packet, args) =>
