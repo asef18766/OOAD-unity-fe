@@ -8,7 +8,19 @@ namespace SocketIO
 {
 	public class SocketIOComponent : MonoBehaviour
 	{
-		public string url = "ws://127.0.0.1:4567/socket.io/?EIO=4&transport=websocket";
+		private readonly SocketOptions _opts = new SocketOptions {ConnectWith = TransportTypes.WebSocket};
+		public string Url
+		{
+			get => url;
+			set
+			{
+				url = value;
+				print($"change url to {url}");
+				_manager = new SocketManager(new Uri(url) , _opts);
+			}
+		}
+
+		[SerializeField] private string url = "ws://localhost:4567/socket.io/?EIO=3&transport=websocket";
 		private SocketManager _manager;
 
 		#region socketIO_utils
@@ -39,6 +51,7 @@ namespace SocketIO
 
 		public void Connect()
 		{
+			print("trying to connect on server");
 			_manager.Open();
 		}
 
@@ -65,12 +78,11 @@ namespace SocketIO
 		{
 			_manager.Close();
 		}
-
+		
 		private void Awake()
 		{
-			var opts = new SocketOptions {ConnectWith = TransportTypes.WebSocket};
-			var uri = new Uri("ws://s2.noj.tw:4567/socket.io/?EIO=3&transport=websocket");
-			_manager = new SocketManager(uri , opts);
+			var uri = new Uri(Url);
+			_manager = new SocketManager(uri , _opts);
 		}
 	}
 }
