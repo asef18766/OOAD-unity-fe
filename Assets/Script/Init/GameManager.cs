@@ -68,7 +68,7 @@ namespace Init
             _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
             _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
             #endregion
-
+            
             var round = new GameObject("GameRound");
             round.AddComponent<GameRound>();
 
@@ -199,6 +199,11 @@ namespace Init
                 default:
                     throw new ArgumentException($"does not support at platform {Application.platform}");
             }
+        }
+
+        private void OnDestroy()
+        {
+            MapFactory.GetInstance().Reset();
         }
     }
 }
