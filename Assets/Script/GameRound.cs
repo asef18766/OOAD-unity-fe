@@ -17,14 +17,14 @@ public class GameRound : MonoBehaviour
         set
         {
             _remainTime = value;
-            if(_remainTime <= 0)
+            if (_remainTime <= 0)
             {
                 _remainTime = roundTime;
-                _eventManager.InvokeEvent("swap" , JSONObject.nullJO);
+                _eventManager.InvokeEvent("swap", JSONObject.nullJO);
             }
             var arg = UpdateSwapTimeFormat.Copy();
             arg["time"].n = _remainTime;
-            _eventManager.InvokeEvent("updateSwapTime" , arg);
+            _eventManager.InvokeEvent("updateSwapTime", arg);
         }
         get => _remainTime;
     }
@@ -47,12 +47,12 @@ public class GameRound : MonoBehaviour
     private bool _isGameEnded = false;
     public void EndGame(string loser)
     {
-        if(_isGameEnded) return;
+        if (_isGameEnded) return;
         CoroutineRunner.Runner.StopAllCoroutines();
-        print("game ended");
-        _eventManager.InvokeEvent("endGame" , JSONObject.nullJO);
         StopAllCoroutines();
         GameChoice.Winner = (loser == "p1") ? "p2" : "p1";
+        _eventManager.InvokeEvent("endGame", new JSONObject($"{{\"winner\":\"{GameChoice.Winner}\"}}"));
+        print($"game ended, {GameChoice.Winner} won!");
 
         switch (GameChoice.GameMode)
         {
