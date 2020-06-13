@@ -115,6 +115,14 @@ namespace UUID
             obj.transform.rotation = Quaternion.Euler(Jsonify.JsontoVector(jsonObject["rotation"]));
         }
 
+        private void _destroyObject(JSONObject jsonObject)
+        {
+            var uuid = Guid.Parse(jsonObject["uuid"].str);
+            if(!_data.ContainsKey(uuid)) return;
+            Object.Destroy(_data[uuid].gameObject);
+                
+        }
+
         private void _onUpdateEntity(SocketIOEvent e)
         {
             Debug.Log($"receive packet updateEntity:{e.data}");
@@ -128,6 +136,9 @@ namespace UUID
                     break;
                 case "Translate":
                     _translateObject(args);
+                    break;
+                case "Destroy":
+                    _destroyObject(args);
                     break;
                 case "Invoke":
                     throw new NotImplementedException();
