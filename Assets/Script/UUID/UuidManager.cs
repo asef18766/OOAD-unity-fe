@@ -147,7 +147,11 @@ namespace UUID
 
         private void _receiveInitOver(SocketIOEvent e)
         {
-            UnityMainThread.Worker.AddJob(() => _network.Emit("ready"));
+            UnityMainThread.Worker.AddJob(() =>
+            {
+                _network.Emit("ready");
+                Debug.Log("i emit ready");
+            });
         }
 
         private IEnumerator _sendMovement()
