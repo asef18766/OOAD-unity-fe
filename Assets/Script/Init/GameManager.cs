@@ -123,6 +123,9 @@ namespace Init
                         UuidManager.GetInstance().PauseGame(false);
                         var round = new GameObject("GameRound");
                         round.AddComponent<GameRound>();
+
+                        EventManager.GetInstance().RegisterEvent("playerHurt", (n, a) => { });
+                        EventManager.GetInstance().RegisterEvent("updateSwapTime", (n, a) => { });
                     });
                     NetworkManager.GetInstance().GetComponent().Emit("initOver");
                 });
