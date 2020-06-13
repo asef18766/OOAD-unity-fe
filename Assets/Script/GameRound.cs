@@ -8,7 +8,7 @@ using Utils;
 public class GameRound : MonoBehaviour
 {
     public static GameRound Instance;
-    [SerializeField] private float roundTime = 10.2f;
+    [SerializeField] private float roundTime = 102.0f;
     [SerializeField] private float updateRate = 0.9f;
 
     private static readonly JSONObject UpdateSwapTimeFormat = new JSONObject("{\"time\":87}");

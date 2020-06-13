@@ -107,7 +107,6 @@ namespace UUID
 
         private IEnumerator _sendMovement()
         {
-            /*
             while (true)
             {
                 yield return new WaitForSeconds(_emitSpeed);
@@ -121,7 +120,7 @@ namespace UUID
                     jsonObject["args"]["uuid"].str = obj.uuid.ToString();
                     _network.Emit("updateEntity", jsonObject);
                 }
-            }*/
+            }
             yield break;
         }
 
