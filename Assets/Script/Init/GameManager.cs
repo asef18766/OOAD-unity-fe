@@ -157,6 +157,9 @@ namespace Init
         private void _buildOnlineClient()
         {
             MapFactory.GlobalSpeed = 0;
+            EventManager.GetInstance().HookNetworking();
+            var uiPrefab = PrefabManager.GetInstance().GetGameObject("UIController");
+            var ui = Instantiate(uiPrefab, canvas.transform);
             UuidManager.GetInstance().HookNetworking();
             creator.PlayerConstructor(Vector3.zero, Vector2.zero, PlayerState.Jump);
         }

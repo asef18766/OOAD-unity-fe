@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using Network;
+using SocketIO;
 using UnityEngine;
+using Utils;
 
 namespace Event
 {
@@ -43,6 +44,29 @@ namespace Event
             }
         }
 
+        private void _onInvokeEvent(SocketIOEvent ev)
+        {
+            var d = ev.data;
+            var eventName = d["name"].str;
+            var args = d["args"];
+            if (!_events.ContainsKey(eventName))
+            {
+                Debug.Log($"Haven't register event {eventName}");
+                return;
+            }
+
+            foreach (var cAction in _events[eventName])
+            {
+                UnityMainThread.Worker.AddJob(() =>
+                {
+                        cAction(eventName , args);
+                });
+            }
+        }
+        public void HookNetworking()
+        {
+            NetworkManager.GetInstance().GetComponent().On("invokeEvent" , _onInvokeEvent);
+        }
         public static EventManager GetInstance()
         {
             return _instance ?? (_instance = new EventManager());
