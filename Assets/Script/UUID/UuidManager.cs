@@ -23,9 +23,11 @@ namespace UUID
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
-            CoroutineRunner.Runner.StartCoroutine(_sendMovement());
             _network = NetworkManager.GetInstance().GetComponent();
-            _network.On("initOver", _recieveInitOver);
+            if (GameChoice.GameMode == GameMode.Server)
+                CoroutineRunner.Runner.StartCoroutine(_sendMovement());
+            else
+                _network.On("initOver", _recieveInitOver);
         }
 
         public static UuidManager GetInstance()
