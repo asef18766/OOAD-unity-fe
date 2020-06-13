@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using Network;
 using SocketIO;
 using Utils;
-using Network;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Map.Platforms;
@@ -14,18 +13,16 @@ namespace UUID
 {
     public class UuidManager
     {
-        [CanBeNull] private static UUID.UuidManager _instance = null;
-        private readonly Dictionary<System.Guid, UuidObject> _data;
-        private SocketIOComponent _network;
+        [CanBeNull] private static UuidManager _instance;
+        private readonly Dictionary<Guid, UuidObject> _data;
+        private readonly SocketIOComponent _network;
         private const float _emitSpeed = 0.5f;
-        private int _initTask = 0;
-        private bool _initOver = false;
         private UuidManager()
         {
             _data = new Dictionary<Guid, UuidObject>();
             CoroutineRunner.Runner.StartCoroutine(_sendMovement());
             _network = NetworkManager.GetInstance().GetComponent();
-            _network.On("initOver", _recieveInitOver);
+            _network.On("initOver", _receiveInitOver);
         }
 
         public static UuidManager GetInstance()
@@ -38,7 +35,7 @@ namespace UUID
             _data.Add(obj.uuid, obj);
         }
 
-        public UuidObject Query(System.Guid uuid)
+        public UuidObject Query(Guid uuid)
         {
             return _data.ContainsKey(uuid) ? _data[uuid] : null;
         }
@@ -75,7 +72,6 @@ namespace UUID
             var position = Jsonify.JsontoVector(jsonObject["transform"]["position"]);
             var rotation = Jsonify.JsontoVector(jsonObject["transform"]["rotation"]);
             var prefab = jsonObject["prefab"].str;
-            _initTask++;
 
             UnityMainThread.Worker.AddJob(() =>
             {
@@ -83,19 +79,14 @@ namespace UUID
 
                 var obj = Object.Instantiate(pref, position, Quaternion.Euler(rotation));
                 obj.GetComponent<UuidObject>().ModifySelfId(guid);
-
-                _initTask--;
-                if (_initTask == 0 && _initOver)
-                {
-                    _network.Emit("ready");
-                    _initOver = false;
-                }
             });
         }
 
         private void _translateObject(JSONObject jsonObject)
         {
-            var obj = Query(Guid.Parse(jsonObject["uuid"].str));
+            var uuid = Guid.Parse(jsonObject["uuid"].str);
+            if(!_data.ContainsKey(uuid)) throw  new ArgumentException($"{uuid} is not in uuid dictionary");
+            var obj = _data[uuid];
             obj.transform.position = Jsonify.JsontoVector(jsonObject["position"]);
             obj.transform.rotation = Quaternion.Euler(Jsonify.JsontoVector(jsonObject["rotation"]));
         }
@@ -116,15 +107,12 @@ namespace UUID
                     break;
                 case "Invoke":
                     throw new NotImplementedException();
-                    break;
             }
         }
 
-        private void _recieveInitOver(SocketIOEvent e)
+        private void _receiveInitOver(SocketIOEvent e)
         {
-            _initOver = true;
-            if (_initTask == 0)
-                _network.Emit("ready");
+            UnityMainThread.Worker.AddJob(() => _network.Emit("ready"));
         }
 
         private IEnumerator _sendMovement()
@@ -133,7 +121,7 @@ namespace UUID
             {
                 yield return new WaitForSeconds(_emitSpeed);
 
-                foreach (UuidObject obj in _data.Values)
+                foreach (var obj in _data.Values)
                 {
                     if (!(obj is IPlatform) && !(obj is Player))
                         continue;

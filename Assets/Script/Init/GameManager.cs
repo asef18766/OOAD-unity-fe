@@ -156,6 +156,7 @@ namespace Init
         #region online_client_implementation
         private void _buildOnlineClient()
         {
+            MapFactory.GlobalSpeed = 0;
             UuidManager.GetInstance().HookNetworking();
             creator.PlayerConstructor(Vector3.zero, Vector2.zero, PlayerState.Jump);
         }
