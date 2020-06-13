@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Event;
 using Init;
 using Map.Platforms;
@@ -12,7 +13,7 @@ namespace Map
 {
     public class MapFactory
     {
-        public static readonly float GlobalSpeed = 0;
+        public static readonly float GlobalSpeed = 1;
         private static MapFactory _instance;
         private readonly Dictionary<PlatformTypes, float> _spawnRate;
         private const float SpawnSpeed = 1.5f;
@@ -58,6 +59,7 @@ namespace Map
         }
         private IEnumerator GeneratePlatform()
         {
+            Debug.Log("generate platform start");
             while(true)
             {
                 yield return new WaitForSeconds(SpawnSpeed);
@@ -95,6 +97,11 @@ namespace Map
                 throw new ArgumentException($"invalid platform type {obj["type"].str}");
             
             CreatePlatform(platformType , loc , scale);
+        }
+
+        public void Reset()
+        {
+            _instance = null;
         }
     }
 }
