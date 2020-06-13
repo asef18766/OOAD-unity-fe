@@ -34,6 +34,8 @@ namespace UUID
 
         public void Register(UuidObject obj)
         {
+            if(_data.ContainsKey(obj.uuid))
+                return;
             _data.Add(obj.uuid, obj);
         }
 
@@ -41,10 +43,11 @@ namespace UUID
         {
             return _data.ContainsKey(uuid) ? _data[uuid] : null;
         }
-        public void Remove(System.Guid uuid)
+        public void Remove(Guid uuid)
         {
-            if (_data.ContainsKey(uuid))
-                _data.Remove(uuid);
+            if (!_data.ContainsKey(uuid)) return;
+            _data.Remove(uuid);
+            
         }
         public void HookNetworking()
         {

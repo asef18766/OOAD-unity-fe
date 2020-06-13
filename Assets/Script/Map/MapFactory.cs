@@ -59,12 +59,12 @@ namespace Map
         }
         private IEnumerator GeneratePlatform()
         {
-            Debug.Log("generate platform start");
             while(true)
             {
                 yield return new WaitForSeconds(SpawnSpeed);
                 var platformType= ChoosePlatformType();
                 var xPos = Random.Range(XMinLocation, XMaxLocation);
+                Debug.Log("generate platform~~");
                 CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
             }
         }

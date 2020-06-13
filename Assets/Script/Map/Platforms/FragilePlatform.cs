@@ -21,8 +21,7 @@ namespace Map.Platforms
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if(other.collider.CompareTag("Player")) return;
-            GameManager.Instance.creator.PlatformConstructor(transform.position , Vector2.one*MapFactory.PlatformScale , PlatformTypes.Normal);
+            if(!other.collider.CompareTag("Player")) return;
             Destroy(gameObject);
         }
     } 
