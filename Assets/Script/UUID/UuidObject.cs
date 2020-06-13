@@ -7,8 +7,9 @@ namespace UUID
     {
         public System.Guid uuid;
 
-        private void Awake()
+        private void Start()
         {
+            if(GameChoice.GameMode == GameMode.Online) return;
             uuid = System.Guid.NewGuid();
             UuidManager.GetInstance().Register(this);
         }

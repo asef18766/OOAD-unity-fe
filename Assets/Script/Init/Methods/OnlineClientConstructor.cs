@@ -52,7 +52,7 @@ namespace Init.Methods
 
             var instance = Object.Instantiate(gameObject);
             instance.transform.position = pos;
-            instance.transform.localScale = scale;
+            instance.transform.localScale = Vector3.one * 4;
             return instance.GetComponent<IPlatform>();
         }
     }

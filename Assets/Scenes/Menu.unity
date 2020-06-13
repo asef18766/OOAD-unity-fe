@@ -730,7 +730,7 @@ MonoBehaviour:
   addServerMenu: {fileID: 2044747931}
   errorWindow: {fileID: 300250539}
   waitWindow: {fileID: 952737558}
-  defaultIp: s2.noj.tw:4567
+  defaultIp: 127.0.0.1:4567
 --- !u!1 &300250539
 GameObject:
   m_ObjectHideFlags: 0

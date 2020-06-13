@@ -45,7 +45,7 @@ public class Player : UuidObject
         }
 
         JSONObject jSonObject = HurtMsgFormat.Copy();
-        jSonObject["playerName"].str = this.gameObject.name;
+        jSonObject["playerName"].str = gameObject.name;
         jSonObject["health"].n = health;
         jSonObject["dmg"].n = dmg;
         _eventManager.InvokeEvent("playerHurt", jSonObject);

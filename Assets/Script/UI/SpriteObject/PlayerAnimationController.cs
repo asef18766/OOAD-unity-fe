@@ -1,10 +1,11 @@
 ﻿using Event;
 using UnityEngine;
+using UUID;
 
 namespace UI.SpriteObject
 {
     [RequireComponent(typeof(Animator))]
-    public class PlayerAnimationController : MonoBehaviour
+    public class PlayerAnimationController : UuidObject
     {
         private Animator _animator;
         private SpriteRenderer _spriteRenderer , _iceSpriteRenderer;

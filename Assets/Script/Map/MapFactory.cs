@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Event;
 using Init;
 using Map.Platforms;
@@ -26,6 +25,7 @@ namespace Map
         
         private MapFactory()
         {
+            if(GameChoice.GameMode == GameMode.Online) return;
             var eventManager = EventManager.GetInstance();
             eventManager.RegisterEvent("CreatePlatform" , CreatePlatform);
             _spawnRate = new Dictionary<PlatformTypes, float>

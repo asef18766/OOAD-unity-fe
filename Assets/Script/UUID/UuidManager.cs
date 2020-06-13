@@ -68,6 +68,7 @@ namespace UUID
          *     "prefab":String
          * }
         */
+        private int _playerCount = 0;
         private void _instantiateObject(JSONObject jsonObject)
         {
             var guid = Guid.Parse(jsonObject["uuid"].str);
@@ -75,19 +76,37 @@ namespace UUID
             var rotation = Jsonify.JsontoVector(jsonObject["transform"]["rotation"]);
             var prefab = jsonObject["prefab"].str;
 
-            UnityMainThread.Worker.AddJob(() =>
+            switch (prefab)
             {
-                var pref = PrefabManager.GetInstance().GetGameObject(prefab);
-
-                var obj = Object.Instantiate(pref, position, Quaternion.Euler(rotation));
-                obj.GetComponent<UuidObject>().ModifySelfId(guid);
-            });
+                case "Player":
+                    UnityMainThread.Worker.AddJob(() =>
+                    {
+                        _playerCount++;
+                        var pref = PrefabManager.GetInstance().GetGameObject($"P{_playerCount}Sprite");
+                        var obj = Object.Instantiate(pref, position, Quaternion.Euler(rotation));
+                        obj.transform.localScale = Vector3.one * 0.4f;
+                        obj.GetComponent<UuidObject>().ModifySelfId(guid);
+                    });
+                    break;
+                default:
+                    UnityMainThread.Worker.AddJob(() =>
+                    {
+                        var pref = PrefabManager.GetInstance().GetGameObject(prefab);
+                        var obj = Object.Instantiate(pref, position, Quaternion.Euler(rotation));
+                        obj.GetComponent<UuidObject>().ModifySelfId(guid);
+                    });
+                    break;
+            }
         }
 
         private void _translateObject(JSONObject jsonObject)
         {
             var uuid = Guid.Parse(jsonObject["uuid"].str);
-            if(!_data.ContainsKey(uuid)) throw  new ArgumentException($"{uuid} is not in uuid dictionary");
+            if (!_data.ContainsKey(uuid))
+            {
+                Debug.Log($"{uuid} is not in uuid dictionary");
+                return;
+            }
             var obj = _data[uuid];
             obj.transform.position = Jsonify.JsontoVector(jsonObject["position"]);
             obj.transform.rotation = Quaternion.Euler(Jsonify.JsontoVector(jsonObject["rotation"]));
