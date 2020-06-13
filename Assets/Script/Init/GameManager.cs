@@ -24,13 +24,13 @@ namespace Init
 
         #region offline_PC_implementation
 
-        private void _setPlayerSprite(GameObject sprite , Player player)
+        private void _setPlayerSprite(GameObject sprite, Player player)
         {
             var playerAnimationController = Instantiate(sprite, player.transform).GetComponent<PlayerAnimationController>();
             player.moveCallBack.Add(playerAnimationController.PlayerMove);
-            player.freezeCallBack.Add(new Tuple<Action<Player>, Action<Player>>(playerAnimationController.PlayerFreeze , playerAnimationController.PlayerUnFreeze));
+            player.freezeCallBack.Add(new Tuple<Action<Player>, Action<Player>>(playerAnimationController.PlayerFreeze, playerAnimationController.PlayerUnFreeze));
         }
-        
+
         private void _buildPcOffline()
         {
             #region map_creation
@@ -50,7 +50,7 @@ namespace Init
             #endregion
             #region player_creation
             const int pScale = 4;
-            var p1 = creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump);
+            var p1 = creator.PlayerConstructor(new Vector2(-2.78f, 2.48f), Vector2.one * pScale, PlayerState.Jump);
             p1.name = "p1";
             var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
             p2.GetComponent<PcKeyboardModel>().walk = new[]
@@ -63,10 +63,10 @@ namespace Init
             p2.GetComponent<PcKeyboardModel>().clicked = KeyCode.KeypadEnter;
             p2.name = "p2";
             var prefabManager = PrefabManager.GetInstance();
-            if(prefabManager == null)
+            if (prefabManager == null)
                 print("null prefab manager");
-            _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
-            _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
+            _setPlayerSprite(prefabManager.GetGameObject("P1Sprite"), p1);
+            _setPlayerSprite(prefabManager.GetGameObject("P2Sprite"), p2);
             #endregion
 
             var round = new GameObject("GameRound");
@@ -121,6 +121,11 @@ namespace Init
                     NetworkManager.GetInstance().GetComponent().On("ready", (data) =>
                     {
                         UuidManager.GetInstance().PauseGame(false);
+                        var round = new GameObject("GameRound");
+                        round.AddComponent<GameRound>();
+
+                        EventManager.GetInstance().RegisterEvent("playerHurt", (n, a) => { });
+                        EventManager.GetInstance().RegisterEvent("updateSwapTime", (n, a) => { });
                     });
                     NetworkManager.GetInstance().GetComponent().Emit("initOver");
                 });
@@ -192,7 +197,7 @@ namespace Init
                         creator = new PcOfflineConstructor();
                         _buildPcOffline();
                     }
-                    else if(GameChoice.GameMode == GameMode.Online)
+                    else if (GameChoice.GameMode == GameMode.Online)
                     {
                         creator = new OnlineClientConstructor();
                         _buildPcOffline();

@@ -48,7 +48,6 @@ public class GameRound : MonoBehaviour
     public void EndGame(string loser)
     {
         if(_isGameEnded) return;
-        EventManager.GetInstance().Clean();
         CoroutineRunner.Runner.StopAllCoroutines();
         print("game ended");
         _eventManager.InvokeEvent("endGame" , JSONObject.nullJO);
@@ -67,6 +66,7 @@ public class GameRound : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        EventManager.GetInstance().Clean();
     }
     private void Start()
     {

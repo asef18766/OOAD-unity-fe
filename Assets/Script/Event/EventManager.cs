@@ -3,43 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using Network;
 
 namespace Event
 {
     public class EventManager
     {
-        private static Dictionary<string, List<Action<string,JSONObject>>> _events = null;
-        private static EventManager _instance=null;
+        private static Dictionary<string, List<Action<string, JSONObject>>> _events = null;
+        private static EventManager _instance = null;
+        private static readonly JSONObject InvokeEventFormat = new JSONObject($"{{\"name\":\"a\"}}");
         private EventManager()
         {
-            _events = new Dictionary<string, List<Action<string,JSONObject>>>();
+            _events = new Dictionary<string, List<Action<string, JSONObject>>>();
         }
 
-        public void RegisterEvent(string eventName, Action<string,JSONObject> handler)
+        public void RegisterEvent(string eventName, Action<string, JSONObject> handler)
         {
             if (!_events.ContainsKey(eventName))
             {
                 Debug.Log($"create list with eventName {eventName}");
-                _events.Add(eventName , new List<Action<string,JSONObject>>());
+                _events.Add(eventName, new List<Action<string, JSONObject>>());
             }
             _events[eventName].Add(handler);
             Debug.Log($"register successfully with event name {eventName}");
         }
-        public void UnRegisterEvent(string eventName, Action<string,JSONObject> handler)
+        public void UnRegisterEvent(string eventName, Action<string, JSONObject> handler)
         {
             if (_events.ContainsKey(eventName))
             {
                 _events[eventName].Remove(handler);
             }
         }
-        public void InvokeEvent(string eventName,JSONObject args)
+        public void InvokeEvent(string eventName, JSONObject args)
         {
-            if (!_events.ContainsKey(eventName)) 
+            if (!_events.ContainsKey(eventName))
                 return;
-            
+
             foreach (var action in _events[eventName])
             {
-                action(eventName,args);
+                action(eventName, args);
+            }
+
+            if (GameChoice.IsServer())
+            {
+                var jsonObject = InvokeEventFormat.Copy();
+                jsonObject["name"].str = eventName;
+                jsonObject["args"] = args;
+                NetworkManager.GetInstance().GetComponent().Emit("invokeEvent", jsonObject);
             }
         }
 
