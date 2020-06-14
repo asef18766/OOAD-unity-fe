@@ -113,7 +113,7 @@ namespace Init
             var round = new GameObject("GameRound");
             round.AddComponent<GameRound>();
             
-            var ui = PrefabManager.GetInstance().GetGameObject("UIController");
+            var ui = PrefabManager.GetInstance().GetGameObject("AppUIController");
             Instantiate(ui, canvas);
         }
 
