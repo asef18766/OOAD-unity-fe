@@ -114,7 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftAccelerate: 1
   rightAccelerate: 1
-  moveScale: 0.1
+  moveScale: 0.05
   jumpScale: 4
   attackRange: 1.5
   attackCd: 1

@@ -229,15 +229,6 @@ namespace Init
                 case RuntimePlatform.OSXPlayer:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
-                    #if UNITY_ANDROID
-                    if (GameChoice.GameMode == GameMode.Offline)
-                    {
-                        Debug.Log("Unity Remote 5");
-                        creator = new AppOfflineConstructor();
-                        _buildAppOffline();
-                        break;
-                    }
-                    #endif
                     if (GameChoice.GameMode == GameMode.Offline)
                     {
                         creator = new PcOfflineConstructor();
