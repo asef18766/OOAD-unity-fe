@@ -117,6 +117,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iceRef: {fileID: 5321403309120673193}
+  attackLineRef: {fileID: 3020806376795095468, guid: 64534496bcb08e74a81ffe330d1c4043,
+    type: 3}
 --- !u!1001 &3006954975895368192
 PrefabInstance:
   m_ObjectHideFlags: 0
