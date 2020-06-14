@@ -91,6 +91,7 @@ namespace Init
             var mapFactory = MapFactory.GetInstance();
             MapFactory.PlatformScale = 2;
             mapFactory.YLocation = 9;
+            mapFactory.SpawnSpeed = 2.5f;
             
             foreach (var location in locations)
                 creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
