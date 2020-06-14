@@ -28,6 +28,7 @@ namespace Init
         {
             var playerAnimationController = Instantiate(sprite, player.transform).GetComponent<PlayerAnimationController>();
             player.moveCallBack.Add(playerAnimationController.PlayerMove);
+            player.clickCallBack.Add(playerAnimationController.AttackEffect);
             player.freezeCallBack.Add(new Tuple<Action<Player>, Action<Player>>(playerAnimationController.PlayerFreeze , playerAnimationController.PlayerUnFreeze));
         }
         

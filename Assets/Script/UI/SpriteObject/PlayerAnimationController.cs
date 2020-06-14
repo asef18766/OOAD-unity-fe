@@ -12,6 +12,7 @@ namespace UI.SpriteObject
         private bool _idle = true;
         private Vector2 _facing = Vector2.left;
         [SerializeField] private GameObject iceRef;
+        [SerializeField] private GameObject attackLineRef;
         private static readonly int Moving = Animator.StringToHash("moving");
 
         private void Start()
@@ -60,5 +61,23 @@ namespace UI.SpriteObject
         }
         public void PlayerFreeze(Player _) => iceRef.SetActive(true);
         public void PlayerUnFreeze(Player _) => iceRef.SetActive(false);
+        
+        public void AttackEffect(string state)
+        {
+            if (state == "_attack")
+            {
+                var line = Instantiate(attackLineRef);
+                var lineRenderer = line.GetComponent<LineRenderer>();
+                Vector3 playerPos = this.transform.position;
+                Vector3 endPos = playerPos;
+                endPos.y += 1.0f;
+                lineRenderer.SetPosition(0, playerPos);
+                for (int i = 0; i < 100; i++)
+                {
+                    lineRenderer.SetPosition(1, endPos);   
+                }
+                Destroy(line);
+            }
+        }
     }
 }
