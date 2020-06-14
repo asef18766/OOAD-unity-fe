@@ -1,18 +1,21 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using UnityEngine;
 
 namespace UUID
 {
     public class UuidObject : MonoBehaviour
     {
-        public System.Guid uuid;
+        public Guid uuid;
 
-        private void Awake()
+        private void Start()
         {
-            uuid = System.Guid.NewGuid();
+            if (GameChoice.GameMode == GameMode.Online)
+                return;
+            print("i am not online mode");
             UuidManager.GetInstance().Register(this);
         }
-        public void ModifySelfId(System.Guid id)
+        public void ModifySelfId(Guid id)
         {
             UuidManager.GetInstance().Remove(uuid);
             uuid = id;

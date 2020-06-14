@@ -28,6 +28,12 @@ namespace UI.MainGame
         }
         void updateSwapTime(string ev,JSONObject obj)
         {
+            print($"update swap time to {obj["time"].n}");
+            if (remainSwapTimeDisplay == null)
+            {
+                Debug.Log("text bar is null");
+                return;
+            }
             remainSwapTimeDisplay.text = obj["time"].n.ToString("#0.0");
         }
     }

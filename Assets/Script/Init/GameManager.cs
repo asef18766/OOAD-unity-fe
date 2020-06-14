@@ -68,7 +68,7 @@ namespace Init
             _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
             _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
             #endregion
-
+            
             var round = new GameObject("GameRound");
             round.AddComponent<GameRound>();
 
@@ -156,6 +156,10 @@ namespace Init
         #region online_client_implementation
         private void _buildOnlineClient()
         {
+            MapFactory.GlobalSpeed = 0;
+            EventManager.GetInstance().HookNetworking();
+            var uiPrefab = PrefabManager.GetInstance().GetGameObject("UIController");
+            var ui = Instantiate(uiPrefab, canvas.transform);
             UuidManager.GetInstance().HookNetworking();
             creator.PlayerConstructor(Vector3.zero, Vector2.zero, PlayerState.Jump);
         }
@@ -188,7 +192,7 @@ namespace Init
                     else if(GameChoice.GameMode == GameMode.Online)
                     {
                         creator = new OnlineClientConstructor();
-                        _buildPcOffline();
+                        _buildOnlineClient();
                     }
                     else if (GameChoice.GameMode == GameMode.Server)
                     {
@@ -199,6 +203,11 @@ namespace Init
                 default:
                     throw new ArgumentException($"does not support at platform {Application.platform}");
             }
+        }
+
+        private void OnDestroy()
+        {
+            MapFactory.GetInstance().Reset();
         }
     }
 }

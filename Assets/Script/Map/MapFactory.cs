@@ -12,7 +12,7 @@ namespace Map
 {
     public class MapFactory
     {
-        public static readonly float GlobalSpeed = 1;
+        public static float GlobalSpeed = 1;
         private static MapFactory _instance;
         private readonly Dictionary<PlatformTypes, float> _spawnRate;
         private const float SpawnSpeed = 1.5f;
@@ -25,6 +25,7 @@ namespace Map
         
         private MapFactory()
         {
+            if(GameChoice.GameMode == GameMode.Online) return;
             var eventManager = EventManager.GetInstance();
             eventManager.RegisterEvent("CreatePlatform" , CreatePlatform);
             _spawnRate = new Dictionary<PlatformTypes, float>
@@ -63,6 +64,7 @@ namespace Map
                 yield return new WaitForSeconds(SpawnSpeed);
                 var platformType= ChoosePlatformType();
                 var xPos = Random.Range(XMinLocation, XMaxLocation);
+                Debug.Log("generate platform~~");
                 CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
             }
         }
@@ -95,6 +97,11 @@ namespace Map
                 throw new ArgumentException($"invalid platform type {obj["type"].str}");
             
             CreatePlatform(platformType , loc , scale);
+        }
+
+        public void Reset()
+        {
+            _instance = null;
         }
     }
 }
