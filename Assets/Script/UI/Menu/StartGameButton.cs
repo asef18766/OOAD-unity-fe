@@ -25,7 +25,11 @@ namespace UI.Menu
                     {
                         Destroy(NetworkManager.GetInstance().GetComponent().gameObject);
                     }
+                    #if UNITY_ANDROID
+                    SceneManager.LoadScene("AndroidGameScene");
+                    #else
                     SceneManager.LoadScene(offlineScene);
+                    #endif
                     break;
                 case GameMode.Online:
                     SceneManager.LoadScene(onlineScene);

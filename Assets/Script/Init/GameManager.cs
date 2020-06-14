@@ -78,6 +78,7 @@ namespace Init
         
         private void _buildAppOffline()
         {
+            Screen.orientation = ScreenOrientation.Portrait;
             #region map_creation
             var locations = new[]
             {
