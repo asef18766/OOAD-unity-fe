@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Event;
 using Init;
 using Map.Platforms;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,9 +12,9 @@ namespace Map
 {
     public class MapFactory
     {
-        private static MapFactory _instance = null;
-        private readonly Dictionary<PlatformTypes, float> _spawnRate = null;
-        private List<IPlatform> _platforms = new List<IPlatform>();
+        public static float GlobalSpeed = 1;
+        private static MapFactory _instance;
+        private readonly Dictionary<PlatformTypes, float> _spawnRate;
         private const float SpawnSpeed = 1.5f;
 
         private const float YLocation = 5;
@@ -25,6 +25,7 @@ namespace Map
         
         private MapFactory()
         {
+            if(GameChoice.GameMode == GameMode.Online) return;
             var eventManager = EventManager.GetInstance();
             eventManager.RegisterEvent("CreatePlatform" , CreatePlatform);
             _spawnRate = new Dictionary<PlatformTypes, float>
@@ -63,7 +64,7 @@ namespace Map
                 yield return new WaitForSeconds(SpawnSpeed);
                 var platformType= ChoosePlatformType();
                 var xPos = Random.Range(XMinLocation, XMaxLocation);
-                Debug.Log($"xPos:{xPos}");
+                Debug.Log("generate platform~~");
                 CreatePlatform(platformType , new Vector2(xPos , YLocation), PlatformScale);
             }
         }
@@ -96,6 +97,11 @@ namespace Map
                 throw new ArgumentException($"invalid platform type {obj["type"].str}");
             
             CreatePlatform(platformType , loc , scale);
+        }
+
+        public void Reset()
+        {
+            _instance = null;
         }
     }
 }

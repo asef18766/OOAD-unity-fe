@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 2462029476106286419}
   - component: {fileID: 2462029476106286428}
   - component: {fileID: 8756764215201789710}
+  - component: {fileID: 7226167139930329987}
   m_Layer: 0
   m_Name: SpikePlatform
   m_TagString: Platform
@@ -191,7 +192,7 @@ Transform:
   m_GameObject: {fileID: 2462029476106286429}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.22, y: 0.21014886, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 2462029476532399319}
   - {fileID: 2462029475779593045}
@@ -240,6 +241,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 1
+  waitDuration: 1
+  dmg: 5
+--- !u!50 &7226167139930329987
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2462029476106286429}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1 &2462029476153155974
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@
 }
 public class GameChoice
 {
-    public static GameMode Gamemode;
+    public static GameMode GameMode;
     public static string ServerName;
+    public static string Winner;
 }

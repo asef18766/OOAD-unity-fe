@@ -1,10 +1,12 @@
+using Init;
 using UnityEngine;
 using UUID;
 namespace Map.Platforms
 {
     public class FragilePlatform : UuidObject , IPlatform
     {
-        private float _speed = 1;
+        //TODO: finish implementation
+        private float _speed = MapFactory.GlobalSpeed;
 
         [SerializeField] private float scale = 1.0f;
         public void SetSpeed(float speed)
@@ -15,6 +17,12 @@ namespace Map.Platforms
         private void Update()
         {
             transform.Translate(Vector3.down * (Time.deltaTime * scale * _speed));
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if(!other.collider.CompareTag("Player")) return;
+            Destroy(gameObject);
         }
     } 
 }

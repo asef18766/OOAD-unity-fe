@@ -8,19 +8,10 @@ public class PrefabManager : ScriptableObject
     [SerializeField] private StringPrefabDictionary prefabs=null;
     [SerializeField] private PrefabManager selfInstance = null;
     private static PrefabManager _instance=null;
-
-    private void Awake()
-    {
-        _instance = selfInstance;
-    }
-
-    private void OnEnable()
-    {
-        _instance = selfInstance;
-    }
-
     public static PrefabManager GetInstance()
     {
+        if(_instance == null)
+            _instance = Resources.Load<PrefabManager>("ScriptableObject/PrefabManager");
         return _instance;
     }
 

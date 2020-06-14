@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Network;
 using SocketIO;
-using ThreadUtils;
+using Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Menu
@@ -24,6 +26,7 @@ namespace UI.Menu
         [SerializeField] private GameObject waitWindow;
         [SerializeField] private GameObject roomWindow;
         [SerializeField] private GameObject errorWindow;
+        [SerializeField] private string sceneName;
         private void Start()
         {
             RoomOption.WaitingWindow = waitWindow;
@@ -33,6 +36,7 @@ namespace UI.Menu
             _network.Emit("listRoom");
             _network.On("joinRoom",_joinRoomResult);
             _optionWidth = options.GetComponent<RectTransform>().rect.height;
+            _network.On("startGame" , _startGame);
         }
         
         private float _optionWidth;
@@ -98,6 +102,16 @@ namespace UI.Menu
                     errorWindow.GetComponent<ErrorWindow>().SetMessage(e.data["msg"].str);
                 });
             }
+        }
+
+        private void _startGame(SocketIOEvent e) =>
+            UnityMainThread.Worker.AddJob(() => SceneManager.LoadScene(sceneName));
+
+        private void OnDestroy()
+        {
+            _network.Off("listRoom" , _getRoomInfo);
+            _network.Off("joinRoom",_joinRoomResult);
+            _network.Off("startGame", _startGame);
         }
     }
 }
