@@ -15,9 +15,9 @@ namespace Map
         public static float GlobalSpeed = 1;
         private static MapFactory _instance;
         private readonly Dictionary<PlatformTypes, float> _spawnRate;
-        private const float SpawnSpeed = 1.5f;
+        public float SpawnSpeed = 1.5f;
 
-        private const float YLocation = 5;
+        public float YLocation = 5;
         private const float XMinLocation = -7;
         private const float XMaxLocation = 7;
 

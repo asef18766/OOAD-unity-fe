@@ -25,6 +25,8 @@ MonoBehaviour:
     - UIController
     - P1Sprite
     - P2Sprite
+    - AppController
+    - AppUIController
     m_values:
     - {fileID: 100000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
     - {fileID: 1553343598733561548, guid: 51d92c62307b03e4a8e5b631023229fe, type: 3}
@@ -37,4 +39,6 @@ MonoBehaviour:
     - {fileID: 8428953995399218687, guid: 1aad4f0a56d4d4f4393f0f3eecafaf7e, type: 3}
     - {fileID: 6584387450774172088, guid: 4211a33fc5ccdaf4a9ff221f7958eeb3, type: 3}
     - {fileID: 3570399124295803574, guid: 5b02aafc602fdfb4c8d91f732a6af248, type: 3}
+    - {fileID: 1716027319378457053, guid: 7b26efe3ca644b54aafcdff452db56fa, type: 3}
+    - {fileID: 438144656776899250, guid: 7b9fbdc615335374d83d63c756dc9b8f, type: 3}
   selfInstance: {fileID: 11400000}

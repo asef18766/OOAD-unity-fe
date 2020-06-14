@@ -28,6 +28,7 @@ namespace Init
         {
             var playerAnimationController = Instantiate(sprite, player.transform).GetComponent<PlayerAnimationController>();
             player.moveCallBack.Add(playerAnimationController.PlayerMove);
+            player.clickCallBack.Add(playerAnimationController.AttackEffect);
             player.freezeCallBack.Add(new Tuple<Action<Player>, Action<Player>>(playerAnimationController.PlayerFreeze , playerAnimationController.PlayerUnFreeze));
         }
         
@@ -73,6 +74,48 @@ namespace Init
             round.AddComponent<GameRound>();
 
             var ui = PrefabManager.GetInstance().GetGameObject("UIController");
+            Instantiate(ui, canvas);
+        }
+        
+        private void _buildAppOffline()
+        {
+            Screen.orientation = ScreenOrientation.Portrait;
+            #region map_creation
+            var locations = new[]
+            {
+                new Vector2(1.75f , 6.45f),
+                new Vector2(4.78f , 4.02f),
+                new Vector2(-2.04f , 2.34f),
+                new Vector2(0.42f , -0.4f),
+                new Vector2(-2.07f , -4.43f),
+                new Vector2(4.49f , -4.43f)
+            };
+            var mapFactory = MapFactory.GetInstance();
+            MapFactory.PlatformScale = 2;
+            mapFactory.YLocation = 9;
+            mapFactory.SpawnSpeed = 2.5f;
+            
+            foreach (var location in locations)
+                creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
+            #endregion
+            
+            #region player_creation
+            const int pScale = 4;
+            var p1 = creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump);
+            p1.name = "p1";
+            var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
+            p2.name = "p2";
+            var prefabManager = PrefabManager.GetInstance();
+            if(prefabManager == null)
+                print("null prefab manager");
+            _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
+            _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
+            #endregion
+            
+            var round = new GameObject("GameRound");
+            round.AddComponent<GameRound>();
+            
+            var ui = PrefabManager.GetInstance().GetGameObject("AppUIController");
             Instantiate(ui, canvas);
         }
 
@@ -176,6 +219,11 @@ namespace Init
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:
+                    if (GameChoice.GameMode == GameMode.Offline)
+                    {
+                        creator = new AppOfflineConstructor();
+                        _buildAppOffline();
+                    }
                     break;
                 case RuntimePlatform.LinuxPlayer:
                     break;
@@ -185,7 +233,6 @@ namespace Init
                 case RuntimePlatform.WindowsEditor:
                     if (GameChoice.GameMode == GameMode.Offline)
                     {
-                        print("i am pc offline");
                         creator = new PcOfflineConstructor();
                         _buildPcOffline();
                     }

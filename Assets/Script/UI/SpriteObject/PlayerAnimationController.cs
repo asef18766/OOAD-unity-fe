@@ -1,6 +1,8 @@
 ﻿using Event;
 using UnityEngine;
 using UUID;
+using System;
+using System.Collections;
 
 namespace UI.SpriteObject
 {
@@ -12,6 +14,7 @@ namespace UI.SpriteObject
         private bool _idle = true;
         private Vector2 _facing = Vector2.left;
         [SerializeField] private GameObject iceRef;
+        [SerializeField] private GameObject attackLineRef;
         private static readonly int Moving = Animator.StringToHash("moving");
 
         private void Start()
@@ -60,5 +63,29 @@ namespace UI.SpriteObject
         }
         public void PlayerFreeze(Player _) => iceRef.SetActive(true);
         public void PlayerUnFreeze(Player _) => iceRef.SetActive(false);
+        
+        private IEnumerator _attackEffect()
+        {
+            var line = Instantiate(attackLineRef);
+            var lineRenderer = line.GetComponent<LineRenderer>();
+            Vector3 playerPos = this.transform.position;
+            Vector3 endPos = playerPos;
+
+            lineRenderer.SetPosition(0, playerPos);
+            for (int i = 0; i < 10; i++)
+            {
+                lineRenderer.SetPosition(1, endPos);
+                endPos.y += 0.2f;
+                yield return new WaitForEndOfFrame();
+            }
+            Destroy(line);
+        }
+        public void AttackEffect(string state)
+        {
+            if (state == "_attack")
+            {
+                StartCoroutine(_attackEffect());
+            }
+        }
     }
 }

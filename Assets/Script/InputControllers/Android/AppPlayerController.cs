@@ -18,15 +18,13 @@ namespace InputControllers.Android
             bool leftPressed = leftMoveButton.GetPressed();
             bool rightPressed = rightMoveButton.GetPressed();
             // if both left and right buttons are pressed or unpressed
-            if (leftPressed ^ rightPressed)
+            if (leftPressed == false && rightPressed == false)
                 return Vector2.zero;
-            Debug.Log("move");
-            return leftPressed ? Vector2.left : Vector2.right;
+            return new Vector2((leftPressed? -1:0) + (rightPressed? 1:0), 0);
         }
     
         public bool OnClicked()
         {
-            Debug.Log("click");
             return functionButton.GetPressed();
         }
     }

@@ -21,7 +21,7 @@ public class Player : UuidObject
     public float leftAccelerate = 1.0f, rightAccelerate = 1.0f;
     [SerializeField] private IPlayerController controller = null;
     [SerializeField] private float moveScale = 0.3f;
-    [SerializeField] private float jumpScale = 3.0f;
+    [SerializeField] public float jumpScale = 3.0f;
     [SerializeField] private float attackRange = 1.0f;
     [SerializeField] private float attackCd = 1.0f;
     [SerializeField] private int health = 100;

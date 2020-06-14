@@ -14,5 +14,9 @@ namespace UI.Menu
         {
             SceneManager.LoadScene(name);
         }
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
     }
 }

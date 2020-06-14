@@ -22,10 +22,12 @@ namespace UI.Menu
             {
                 case GameMode.Offline:
                     if (NetworkManager.HasInstance())
-                    {
                         Destroy(NetworkManager.GetInstance().GetComponent().gameObject);
-                    }
-                    SceneManager.LoadScene(offlineScene);
+                    if(Application.platform == RuntimePlatform.Android)
+                        SceneManager.LoadScene("AndroidGameScene");
+                    else
+                        SceneManager.LoadScene(offlineScene);
+                    
                     break;
                 case GameMode.Online:
                     SceneManager.LoadScene(onlineScene);
