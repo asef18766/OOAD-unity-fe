@@ -29,13 +29,14 @@ namespace Init.Methods
             playerObject.transform.position = pos;
             playerObject.transform.localScale = scale;
             var player = playerObject.GetComponent<Player>();
+            player.jumpScale = 8;
             
             var controllerPrefab = PrefabManager.GetInstance().GetGameObject("AppController");
             Vector3 controllerPosition = _isUpperPlayer ? new Vector3(0, 10.5f) : new Vector3(0, -10.5f);
             var controllerGameObject = Object.Instantiate(controllerPrefab, controllerPosition, quaternion.identity);
             var controller = controllerGameObject.GetComponent<IPlayerController>();
             if(controller == null)
-                Debug.Log("player controoler is null");
+                Debug.Log("player controller is null");
             player.InitPlayer(controller , iniState);
             _isUpperPlayer = !_isUpperPlayer;    
             return player;
