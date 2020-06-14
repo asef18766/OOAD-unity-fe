@@ -2,6 +2,7 @@
 using InputControllers.Android;
 using System;
 using Map.Platforms;
+using Unity.Mathematics;
 using Object = UnityEngine.Object;
 
 namespace Init.Methods
@@ -9,6 +10,7 @@ namespace Init.Methods
     public class AppOfflineConstructor : IObjectConstructor
     {
         private static PrefabManager _prefabManager;
+        private bool _isUpperPlayer = false;
         public Player PlayerConstructor(Vector3 pos, Vector2 scale, PlayerState iniState)
         {
             if (_prefabManager == null)
@@ -29,6 +31,12 @@ namespace Init.Methods
             var controller = playerObject.AddComponent<AppPlayerController>();
             var player = playerObject.GetComponent<Player>();
             player.InitPlayer(controller , iniState);
+            
+            var playerController = PrefabManager.GetInstance().GetGameObject("AppController");
+            Vector3 controllerPosition = _isUpperPlayer ? new Vector3(0, 10.5f) : new Vector3(0, -10.5f);
+            Object.Instantiate(playerController, controllerPosition, quaternion.identity);
+            _isUpperPlayer = !_isUpperPlayer;
+            
             return player;
         }
 

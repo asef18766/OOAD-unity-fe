@@ -26,6 +26,7 @@ namespace InputControllers.Android
     
         public bool OnClicked()
         {
+            Debug.Log(functionButton == null);
             Debug.Log("click");
             return functionButton.GetPressed();
         }
