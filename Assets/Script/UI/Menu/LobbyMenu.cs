@@ -37,6 +37,9 @@ namespace UI.Menu
             _network.On("joinRoom",_joinRoomResult);
             _optionWidth = options.GetComponent<RectTransform>().rect.height;
             _network.On("startGame" , _startGame);
+#if UNITY_ANDROID
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
+#endif
         }
         
         private float _optionWidth;

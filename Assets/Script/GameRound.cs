@@ -58,7 +58,11 @@ public class GameRound : MonoBehaviour
         switch (GameChoice.GameMode)
         {
             case GameMode.Offline:
+                #if UNITY_ANDROID
+                SceneManager.LoadScene("AndroidEndScene");
+                #else
                 SceneManager.LoadScene("EndScence");
+                #endif
                 break;
             case GameMode.Online:
                 break;

@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 211cf081ccf84014ba527b24244ead99
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/AndroidGameScene.unity
     guid: b0c64c07c3a16df43b7b23664e8af684
   - enabled: 1
@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndScence.unity
     guid: 251952d8e61083846bf79577e8cfc563
+  - enabled: 1
+    path: Assets/Scenes/AndroidEndScene.unity
+    guid: 0520c55ad254c474096252b9d6e17017
   m_configObjects: {}
