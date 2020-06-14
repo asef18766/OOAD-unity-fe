@@ -109,6 +109,12 @@ namespace Init
             _setPlayerSprite(prefabManager.GetGameObject("P1Sprite") , p1);
             _setPlayerSprite(prefabManager.GetGameObject("P2Sprite") , p2);
             #endregion
+            
+            var round = new GameObject("GameRound");
+            round.AddComponent<GameRound>();
+            
+            var ui = PrefabManager.GetInstance().GetGameObject("UIController");
+            Instantiate(ui, canvas);
         }
 
         #endregion
