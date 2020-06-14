@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using InputControllers.Android;
+using InputControllers;
 using System;
 using Map.Platforms;
 using Unity.Mathematics;
@@ -28,15 +28,16 @@ namespace Init.Methods
             var playerObject = Object.Instantiate(playerPrefab);
             playerObject.transform.position = pos;
             playerObject.transform.localScale = scale;
-            var controller = playerObject.AddComponent<AppPlayerController>();
             var player = playerObject.GetComponent<Player>();
-            player.InitPlayer(controller , iniState);
             
-            var playerController = PrefabManager.GetInstance().GetGameObject("AppController");
+            var controllerPrefab = PrefabManager.GetInstance().GetGameObject("AppController");
             Vector3 controllerPosition = _isUpperPlayer ? new Vector3(0, 10.5f) : new Vector3(0, -10.5f);
-            Object.Instantiate(playerController, controllerPosition, quaternion.identity);
-            _isUpperPlayer = !_isUpperPlayer;
-            
+            var controllerGameObject = Object.Instantiate(controllerPrefab, controllerPosition, quaternion.identity);
+            var controller = controllerGameObject.GetComponent<IPlayerController>();
+            if(controller == null)
+                Debug.Log("player controoler is null");
+            player.InitPlayer(controller , iniState);
+            _isUpperPlayer = !_isUpperPlayer;    
             return player;
         }
 
