@@ -40,6 +40,27 @@ namespace Init
                 KeyCode.RightArrow
             };
         }
+        
+        private void _buildAppOffline()
+        {
+            var locations = new[]
+            {
+                new Vector2(1.75f , 3.45f),
+                new Vector2(4.78f , 2.02f),
+                new Vector2(-2.04f , 1.34f),
+                new Vector2(0.42f , -0.4f),
+                new Vector2(-2.07f , -2.43f),
+                new Vector2(4.49f , -2.43f)
+            };
+            //MapFactory.GetInstance();
+            //MapFactory.PlatformScale = 2;
+            //foreach (var location in locations)
+            //    creator.PlatformConstructor(location, Vector2.one * 2,PlatformTypes.Normal);
+
+            const int pScale = 4;
+            creator.PlayerConstructor(new Vector2(-2.78f, 2.48f),Vector2.one * pScale, PlayerState.Jump);
+            var p2 = creator.PlayerConstructor(new Vector2(3.904f, -3.963f), Vector2.one * pScale, PlayerState.Attack);
+        }
 
         #endregion
         private void Awake()
@@ -48,12 +69,26 @@ namespace Init
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:
+                    if (GameChoice.Gamemode == GameMode.Offline)
+                    {
+                        creator = new AppOfflineConstructor();
+                        _buildAppOffline();
+                    }
                     break;
                 case RuntimePlatform.LinuxPlayer:
                     break;
                 case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
+                    #if UNITY_ANDROID
+                    if (GameChoice.Gamemode == GameMode.Offline)
+                    {
+                        Debug.Log("Unity Remote 5");
+                        creator = new AppOfflineConstructor();
+                        _buildAppOffline();
+                        break;
+                    }
+                    #endif
                     if (GameChoice.Gamemode == GameMode.Offline)
                     {
                         creator = new PcOfflineConstructor();
